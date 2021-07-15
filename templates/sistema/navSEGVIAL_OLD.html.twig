@@ -1,0 +1,57 @@
+<nav class="sidebar navbar navbar-expand-lg navbar-dark  red accent-4">
+  <div class="collapse navbar-collapse container red accent-4" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto red accent-4">
+      <li class="nav-item dropdown red accent-4"> 
+        <a class="dropdown-item btn red accent-4 text-white" href="{{ path('return_to_home') }}">
+          Home
+          <i class="fas fa-home"></i>
+        </a>
+      </li>
+
+      {% if is_granted('ROLE_SUPER_ADMIN') %}
+
+
+                <li class="nav-item dropdown red accent-4">
+                  <a class="nav-link dropdown-toggle btn red accent-4" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Unidades
+                  </a>
+                  <ul class="dropdown-menu red accent-4">
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_unidad') }}">Nueva Unidad</a></li>
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('lista_unidades') }}">Listado Unidades</a></li>                       
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown  red accent-4">
+                  <a class="nav-link dropdown-toggle btn red accent-4" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Propietarios
+                  </a>
+                  <ul class="dropdown-menu red accent-4">
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_propietario') }}">ABM Propietario</a></li>                     
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown  red accent-4">
+                  <a class="nav-link dropdown-toggle btn red accent-4" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Opciones
+                  </a>
+                  <ul class="dropdown-menu red accent-4"> 
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_tipo_motor') }}">ABM Tipo Motor</a></li>
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_calidad_unidad') }}">ABM Calidad Unidad</a></li> 
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_tipo_habilitacion') }}">ABM Tipo Habilitacion</a></li> 
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_tipo_unidad') }}">ABM Tipo Unidad</a></li>    
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_tipo_suspension') }}">ABM Tipo Suspension</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown  red accent-4">
+                  <a class="nav-link dropdown-toggle btn red accent-4" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Administrar Peajes
+                  </a>
+                  <ul class="dropdown-menu red accent-4"> 
+                        <li><a class="dropdown-item red accent-4 text-white" href="{{ path('alta_estacion_peaje') }}">ABM Estacion Peajes</a></li>
+                  </ul>
+                </li>
+
+    {% endif  %}
+    </ul>
+  </div>
+</nav>

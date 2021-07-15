@@ -1,0 +1,21 @@
+{% block desicion %}
+
+{% if (is_granted('IS_AUTHENTICATED_FULLY')) and (show_nav is not defined) %}
+
+    {% if app.session.get('module') == 'RRHH' %}    
+
+      
+
+    {% elseif app.session.get('module') == 'SEGVIAL' %}
+
+
+
+    {% elseif app.session.get('module') == 'VENTAS' %}
+
+        {% extends 'navVENTAS.html.twig' %}
+
+    {% elseif app.session.get('module') == 'TRAFICO' %}
+
+    {% endif %}
+{% endif %}
+

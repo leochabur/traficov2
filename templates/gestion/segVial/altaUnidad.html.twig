@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="h4 mt-5 mb-3">Nueva Unidad</div>
+    <hr>
+    {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }}
+		<div class='form-row ml-4 mr-2 mt-3 mb-3 h6'>
+			GENERAL
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'> 
+			    {{ form_label(form.interno) }}
+			    {{ form_widget(form.interno, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.interno) }}</div>
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.dominioAnterior) }}
+			    {{ form_widget(form.dominioAnterior, { 'attr' : {'class' : 'dominio form-control text-uppercase form-control-sm'}}) }}
+			    <div class="text-danger">{{ form_errors(form.dominioAnterior) }}</div>
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.dominioNuevo) }}
+			    {{ form_widget(form.dominioNuevo, { 'attr' : {'class' : 'ndominio form-control text-uppercase form-control-sm'}}) }}
+			    <div class="text-danger">{{ form_errors(form.dominioNuevo) }}</div>
+			</div>
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.tipoUnidad) }}
+			    {{ form_widget(form.tipoUnidad, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.tipoUnidad) }}</div>
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.propietario) }}
+			    {{ form_widget(form.propietario, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.propietario) }}</div>
+			</div>			
+		</div>
+
+		{% if app.user.perfil.perfil == 'PERFIL_SEGVIAL' %}
+		<hr>
+		<div class='form-row ml-4 mr-2 mt-3 mb-3 h6'>
+			CHASIS
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.chasisMarca, 'Marca') }}
+			    {{ form_widget(form.chasisMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.chasisMarca) }}</div>
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.chasisModelo, 'Modelo') }}
+			    {{ form_widget(form.chasisModelo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.chasisModelo) }}</div>
+			</div>		
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.chasisNumero, 'Numero') }}
+			    {{ form_widget(form.chasisNumero, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.chasisNumero) }}</div>
+			</div>
+		</div>	
+		<div class='form-row ml-4 mr-2 mt-2'>	
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.fechaInscripcion) }}
+			    {{ form_widget(form.fechaInscripcion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.fechaInscripcion) }}</div>
+			</div>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.anioModelo) }}
+			    {{ form_widget(form.anioModelo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.anioModelo) }}</div>
+			</div>	
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.radicacion) }}
+			    {{ form_widget(form.radicacion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.radicacion) }}</div>
+			</div>
+		</div>	
+		<div class='form-row ml-4 mr-2 mt-2'>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.capacidadTanque) }}
+			    {{ form_widget(form.capacidadTanque, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.capacidadTanque) }}</div>
+			</div>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.cantidadTanques) }}
+			    {{ form_widget(form.cantidadTanques, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.cantidadTanques) }}</div>
+			</div>		
+		</div>
+		<div class='form-row ml-4 mr-2 mt-2'>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.habilitaciones) }}
+			    {{ form_widget(form.habilitaciones, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.habilitaciones) }}</div>
+			</div>	
+		</div>
+		<hr>
+		<div class='form-row ml-4 mr-2 mt-3 mb-3 h6'>
+			MOTOR
+		</div>
+		<div class='form-row ml-4 mr-2 mt-2'>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.tipoMotor) }}
+			    {{ form_widget(form.tipoMotor, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.tipoMotor) }}</div>
+			</div>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.motorMarca) }}
+			    {{ form_widget(form.motorMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.motorMarca) }}</div>
+			</div>		
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.motorNumero) }}
+			    {{ form_widget(form.motorNumero, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.motorNumero) }}</div>
+			</div>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.consumo) }}
+			    {{ form_widget(form.consumo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.consumo) }}</div>
+			</div>	
+		</div>
+		<hr>
+		<div class='form-row ml-4 mr-2 mt-3 mb-3 h6'>
+			CARROCERIA
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.calidadUnidad) }}
+			    {{ form_widget(form.calidadUnidad, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.calidadUnidad) }}</div>
+			</div>
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.color) }}
+			    {{ form_widget(form.color, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.color) }}</div>
+			</div>
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.carroceriaMarca) }}
+			    {{ form_widget(form.carroceriaMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.carroceriaMarca) }}</div>
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.carroceriaModelo) }}
+			    {{ form_widget(form.carroceriaModelo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.carroceriaModelo) }}</div>
+			</div>		
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.capacidadCNRT, 'Capacidad CNRT') }}
+			    {{ form_widget(form.capacidadCNRT, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.capacidadCNRT) }}</div>
+			</div>	
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.capacidadReal, 'Capacidad Real') }}
+			    {{ form_widget(form.capacidadReal, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.capacidadReal) }}</div>
+			</div>	
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.audioVideo, 'Audio/Video') }}
+			    {{ form_widget(form.audioVideo, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.audioVideo) }}</div>
+			</div>
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.banio, 'Baño') }}
+			    {{ form_widget(form.banio, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.banio) }}</div>
+			</div>		
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.bar, 'Bar') }}
+			    {{ form_widget(form.bar, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.bar) }}</div>
+			</div>	
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.ploteo, 'Ploteo') }}
+			    {{ form_widget(form.ploteo, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.ploteo) }}</div>
+			</div>	
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.pcABordo, 'PC a Bordo') }}
+			    {{ form_widget(form.pcABordo, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.pcABordo) }}</div>
+			</div>	
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.carteleraElectronica, 'Cartelera') }}
+			    {{ form_widget(form.carteleraElectronica, { 'attr' : {'class' : ''}}) }}
+			    <div class="text-danger">{{ form_errors(form.carteleraElectronica) }}</div>
+			</div>	
+		</div>
+		{% endif %}
+		<hr>
+		<div class='form-row ml-4 mr-2 mt-2 align-right'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn danger-color-dark text-white'}}) }}
+		</div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+		$( ".dominio" ).inputmask({
+								mask: 'AAA-999',
+								placeholder: 'AAA-999',
+								showMaskOnHover: true,
+								showMaskOnFocus: true,
+								removeMaskOnSubmit: true
+							  });
+		$( ".ndominio" ).inputmask({
+								mask: 'AA-999-AA',
+								placeholder: 'AA-999-AA',
+								showMaskOnHover: true,
+								showMaskOnFocus: true,
+								removeMaskOnSubmit: true
+							  });
+	});
+
+</script>
+{% endblock %}
+

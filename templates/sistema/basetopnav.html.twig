@@ -1,0 +1,25 @@
+
+    {% set module = app.session.get('module') %}
+
+    {% if app.session.get('module') == 'RRHH' %}    
+
+        {% include 'navRRHH.html.twig' %}
+
+    {% elseif app.session.get('module') == 'SEGVIAL' %}
+
+        {% include 'navSEGVIAL.html.twig' %}
+
+    {% elseif app.session.get('module') == 'VENTAS' %}
+
+        {% include 'navVENTAS.html.twig' %}
+
+    {% elseif app.session.get('module') == 'TRAFICO' %}
+
+        {% include 'navTRAFICO.html.twig' %}
+
+    {% else %}
+
+        {% include 'viewSelectModule.html.twig' %}
+
+    {% endif %}
+

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="h4 mt-5 mb-2">{{ label }} Propietario</div>
+    <hr>
+        {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }} 
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.razonSocial) }}
+			    {{ form_widget(form.razonSocial, { 'attr' : {'class' : 'text-uppercase form-control'}}) }}
+			    <div class="text-danger">{{ form_errors(form.razonSocial) }}</div>
+			</div>   
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.cuit) }}
+			    {{ form_widget(form.cuit, { 'attr' : {'class' : 'cuit form-control'}}) }}
+			    <div class="text-danger">{{ form_errors(form.cuit) }}</div>
+			</div>
+		</div>
+
+		<div class='form-row ml-4 mr-2 mt-2'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn danger-color-dark text-white'}}) }}
+		</div>    
+    {{ form_end(form) }}
+    {% if edit is not defined %}
+	    <hr>
+		<table class="table table-hover table-bordered table-striped table-sm">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Razon Social</th>
+		      <th scope="col">CUIT</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for s in empleadores %}
+		  		<tr>
+		  			<td>{{ loop.index }}</td>
+		  			<td>{{ s|upper }}</td>
+		  			<td>{{ s.formatCuit }}</td>
+		  			<td class="text-center">
+		  					<a href="{{ path('editar_propietario', {id : s.id}) }}" class="btn btn-sm danger-color-dark text-white">Editar</a>
+		  			</td>
+		  		</tr>
+		  	{% endfor %}
+		  </tbody>
+		</table>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+		$( ".cuit" ).inputmask({
+								mask: '99-99999999-9',
+								mask: '99-99999999-9',
+								showMaskOnHover: true,
+								showMaskOnFocus: true,
+								removeMaskOnSubmit: true
+							  });
+	});
+</script>
+{% endblock %}
+

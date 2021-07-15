@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+	<style>
+		#map_canvas {
+  width:780px;
+  height:480px;
+}
+</style>
+
+    <div class="h4 mt-5 mb-5">{{ label }} Estacion Peaje</div>
+    <hr>
+    {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }} 
+	    <div class='form-row ml-3 mr-2 mt-2'>	 
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.nombre) }}
+			    {{ form_widget(form.nombre, { 'attr' : {'class' : 'form-control'}}) }}
+			    <div class="text-danger">{{ form_errors(form.nombre) }}</div>
+			</div>   
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.estructura) }}
+			    {{ form_widget(form.estructura, { 'attr' : {'class' : 'form-control'}}) }}
+			    <div class="text-danger">{{ form_errors(form.estructura) }}</div>
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.latitud) }}
+			    {{ form_widget(form.latitud, { 'attr' : {'class' : 'form-control latitud'}}) }}
+			    <div class="text-danger">{{ form_errors(form.latitud) }}</div>
+			</div>   
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.longitud) }}
+			    {{ form_widget(form.longitud, { 'attr' : {'class' : 'form-control longitud'}}) }}
+			    <div class="text-danger">{{ form_errors(form.longitud) }}</div>
+			</div> 
+			<div class=' col-lg-2 col-sm-12 mt-4'>
+				<a data-toggle="modal" data-target="#myModal">
+				    <i class="fas fa-map-marker-alt fa-2x"></i>
+				 </a>
+			</div>
+		</div>
+
+		<div class='form-row ml-4 mr-2 mt-2'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn danger-color-dark text-white'}}) }}
+		</div>
+    
+    {{ form_end(form) }}
+    {% if edit is not defined %}
+	    <hr>
+		<table class="table table-hover table-bordered table-striped table-sm">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Estructura</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for e in estaciones %}
+		  		<tr>
+		  			<td>{{ loop.index }}</td>
+		  			<td>{{ e|upper }}</td>
+		  			<td>{{ e.estructura|upper }}</td>
+		  			<td class="text-center">
+		  					<a href="" class="btn btn-sm danger-color-dark text-white">Editar</a>
+		  			</td>
+		  		</tr>
+		  	{% endfor %}
+		  </tbody>
+		</table>
+	{% endif %}
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccionar coordenadas</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div id="map_canvas">
+
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWxzUoadM_CcbqLBeqGp2xMYfSjyMJ-M"> </script>
+<script type="text/javascript">
+
+    	$(document).ready(function(){
+    			const uluru = { lat: -34.103270, lng: -59.120314 };
+    			var map = new google.maps.Map(document.getElementById('map_canvas'), {
+    								center: uluru,
+					                zoom: 12,
+					                mapTypeId: google.maps.MapTypeId.ROADMAP
+					            });
+    			initialize();
+
+    			$("#myModal").on("shown.bs.modal", function () {
+																    google.maps.event.trigger(map, "resize");
+																});
+				function initialize() {
+							            var vMarker = new google.maps.Marker({
+							                position: new google.maps.LatLng(19.4326077, -99.13320799999997),
+							                draggable: true
+							            });
+							            google.maps.event.addListener(vMarker, 'dragend', function (evt) {
+							                $(".latitud").val(evt.latLng.lat().toFixed(6));
+							                $(".longitud").val(evt.latLng.lng().toFixed(6));
+
+							                map.panTo(evt.latLng);
+							            });
+							            map.setCenter(vMarker.position);
+							            vMarker.setMap(map);
+							        }
+    	});
+
+
+</script>
+
+{% endblock %}
+

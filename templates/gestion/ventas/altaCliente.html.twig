@@ -1,0 +1,299 @@
+{% extends 'base.html.twig' %}
+{% block title_module %}
+	{{ label }}
+{% endblock %}
+{% block content %}
+	{{ parent() }}
+
+		<style>
+		#map_canvas {
+  width:780px;
+  height:480px;
+}
+</style>
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }}
+    	<div class='form-row ml-2 mt-2 h4 text-muted'>
+    		Datos Contables
+    	</div>	 
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.prefijo) }}
+			    {{ form_widget(form.prefijo, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.prefijo) }}</div>
+			</div>   
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.razonSocial) }}
+			    {{ form_widget(form.razonSocial, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.razonSocial) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.nombreFantasia) }}
+			    {{ form_widget(form.nombreFantasia, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.nombreFantasia) }}
+			</div>
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	    
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.cuit) }}
+			    {{ form_widget(form.cuit, { 'attr' : {'class' : 'form-control cuit'}}) }}
+			    {{ form_errors(form.cuit) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.domicilioFiscal) }}
+			    {{ form_widget(form.domicilioFiscal, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.domicilioFiscal) }}
+			</div>
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.responsabilidad, 'Responsabilidad IVA') }}
+			    {{ form_widget(form.responsabilidad, { 'attr' : {'class' : 'form-control '}}) }}
+			    {{ form_errors(form.responsabilidad) }}
+			</div>
+		</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	   
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.condicionPago) }}
+			    {{ form_widget(form.condicionPago, { 'attr' : {'class' : 'form-control cuit'}}) }}
+			    {{ form_errors(form.condicionPago) }}
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.tipoFactura) }}
+			    {{ form_widget(form.tipoFactura, { 'attr' : {'class' : 'form-control cuit'}}) }}
+			    {{ form_errors(form.tipoFactura) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.tipoAjuste) }}
+			    {{ form_widget(form.tipoAjuste, { 'attr' : {'class' : 'form-control'}}) }}
+			    {{ form_errors(form.tipoAjuste) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.frecuencaAjuste) }}
+			    {{ form_widget(form.frecuencaAjuste, { 'attr' : {'class' : 'form-control'}}) }}
+			    {{ form_errors(form.frecuencaAjuste) }}
+			</div>
+		</div>
+    	<div class='form-row ml-2 mt-4 h4 text-muted'>
+    		Datos Operativos
+    	</div>	 
+	    <div class='form-row ml-4 mr-2 mt-2'>	    
+<ul class="tags" data-prototype="{% filter escape %}{% include '@Gestion/ventas/formPrototype.html.twig' with { 'elem': form.ubicaciones.vars.prototype } %}{% endfilter %}">
+
+        {% for ubicacion in form.ubicaciones %}
+            <li>
+            	<div class='form-row'>
+            		<div class=' col-lg-3'>
+		            	{{ form_label(ubicacion.latitud, 'Latitud') }}
+		            	{{ form_widget(ubicacion.latitud , { 'attr' : {'class' : 'latitud form-control form-control-sm'}}) }}
+		            </div>
+            		<div class=' col-lg-3'>
+		            	{{ form_label(ubicacion.longitud, 'Longitud') }}
+		            	{{ form_widget(ubicacion.longitud , { 'attr' : {'class' : 'longitud form-control form-control-sm'}}) }}
+		            </div>
+            		<div class=' col-lg-3'>
+		            	{{ form_label(ubicacion.ciudad, 'Ciudad') }}
+		            	{{ form_widget(ubicacion.ciudad , { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+		            </div>
+            		<div class=' col-lg-3'>
+		            	{{ form_label(ubicacion.estructura, 'Estructura') }}
+		            	{{ form_widget(ubicacion.estructura , { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+		            </div>
+            	</div>
+            </li>           
+        {% endfor %}
+
+</ul>
+	
+		</div>
+		<div class="text-danger">{{ form_errors(form) }}</div>
+    	<div class='form-row ml-2 mt-4 h4 text-muted'>
+    		Datos de contacto
+    	</div>
+	    <div class='form-row ml-4 mr-2 mt-2'>	   
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.nombreContacto) }}
+			    {{ form_widget(form.nombreContacto, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.nombreContacto) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.cargoContacto) }}
+			    {{ form_widget(form.cargoContacto, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.cargoContacto) }}
+			</div> 
+		</div>
+		<div class='form-row ml-4 mr-2 mt-2'>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.telefonoContacto) }}
+			    {{ form_widget(form.telefonoContacto, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.telefonoContacto) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.celularContacto) }}
+			    {{ form_widget(form.celularContacto, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.celularContacto) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'>
+			    {{ form_label(form.mailContacto) }}
+			    {{ form_widget(form.mailContacto, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			    {{ form_errors(form.mailContacto) }}
+			</div>
+		</div>
+		<div class='form-row ml-4 mr-2 mt-2'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn btn-success'}}) }}
+		</div>
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccionar coordenadas</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div id="map_canvas">
+
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    {{ form_end(form) }}
+
+{% endblock content %}
+
+{% block javascripts %}
+<script type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWxzUoadM_CcbqLBeqGp2xMYfSjyMJ-M"> </script>
+<script type="text/javascript">
+
+
+
+var $collectionHolder;
+
+// setup an "add a tag" link
+var $addTagLink = $('<a href="#" class="add_tag_link btn btn-sm btn-warning">Nueva Ubicacion Planta</a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
+var i = 1;
+let latitud, longitud, map;
+
+function addTagForm($collectionHolder, $newLinkLi, indice) {
+
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+    
+    // get the new index
+    var index = $collectionHolder.data('index');
+    
+    // Replace '$$name$$' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+    
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+    
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li class="ll-'+indice+'"></li>').append(newForm);
+    
+    // also add a remove button, just for this example
+    $newFormLi.append('<a data-toggle="modal" data-target="#myModal" class="mr-2" onClick="showForm('+indice+');"><i class="far fa-map"></i></a>');
+    $newFormLi.append('<a href="#" class="remove-tag btn-sm btn-danger">x</a>');
+    
+    $newLinkLi.before($newFormLi);
+    
+    // handle the removal, just for this example
+    $('.remove-tag').click(function(e) {
+        e.preventDefault();
+        
+        $(this).parent().remove();
+        
+        return false;
+    });
+}
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormButton = $('<a class="btn btn-sm btn-danger">x</a>');
+    $tagFormLi.append('<a data-toggle="modal" data-target="#myModal" class="mr-2" onClick="showFormOnComponent(this);"><i class="far fa-map"></i></a>');
+    $tagFormLi.append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the tag form
+        $tagFormLi.remove();
+    });
+}
+
+function showFormOnComponent(component)
+{
+	latitud = $(component).siblings().find('.latitud');
+	longitud = $(component).siblings().find('.longitud');
+}
+
+$(document).ready(function(){
+				
+				$( ".cuit" ).inputmask({
+										mask: '99-99999999-9',
+										placeholder: '99-99999999-9',
+										showMaskOnHover: true,
+										showMaskOnFocus: true
+									  });
+			   var $collectionHolder = $('ul.tags');
+			    $collectionHolder.find('li').each(function() {
+			        addTagFormDeleteLink($(this));
+			    });
+			    $collectionHolder.append($newLinkLi);
+			    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+			    
+			    $addTagLink.on('click', function(e) {
+			        e.preventDefault();
+			        addTagForm($collectionHolder, $newLinkLi, i);
+			        i++;
+			    });
+    			
+
+    			$("#myModal").on("shown.bs.modal", function () {												   
+												    			map = new google.maps.Map(document.getElementById('map_canvas'), {
+																	                zoom: 8,
+																	                mapTypeId: google.maps.MapTypeId.ROADMAP
+																	            });
+
+												    			initialize();
+																google.maps.event.trigger(map, "resize");
+																});
+
+
+				function initialize() {
+							            var vMarker = new google.maps.Marker({
+							                position: new google.maps.LatLng( { lat: -34.09557942423603, lng: -59.0513387178529 }),
+							                draggable: true
+							            });
+							            google.maps.event.addListener(vMarker, 'dragend', function (evt) {
+
+							                $(latitud).val(evt.latLng.lat().toFixed(6));
+							                $(longitud).val(evt.latLng.lng().toFixed(6));
+
+							                map.panTo(evt.latLng);
+							            });
+							            map.setCenter(vMarker.position);
+							            vMarker.setMap(map);
+							        }
+		    
+});
+
+function showForm(indice)
+{
+	var li = $('.ll-'+indice);
+	latitud = $(li).find('.latitud');
+	longitud = $(li).find('.longitud');
+
+}
+
+
+
+
+
+</script>
+{% endblock javascripts %}
+

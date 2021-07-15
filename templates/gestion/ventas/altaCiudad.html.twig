@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('resources/css/bootstrap-multiselect.css') }}" rel="stylesheet">
+
+  <style type="text/css">
+input::-webkit-input-placeholder {
+    font-size: 5px;
+    line-height: 4;
+}
+  </style>
+{% endblock %}
+{% block content %}
+	{{ parent() }}
+    <div class="h3 mt-5 mb-5">Nueva Ciudad</div>
+    {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }} 
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class='col-lg-3 col-sm-12'>
+			    {{ form_label(form.nombre) }}
+			    {{ form_widget(form.nombre, { 'attr' : {'class' : 'form-control'}}) }}
+			    <span class="text-danger">{{ form_errors(form.nombre) }}</span>
+			</div>   
+	    	<div class='col-lg-3 col-sm-12'>
+			    {{ form_label(form.provincia) }}
+			    {{ form_widget(form.provincia, { 'attr' : {'class' : 'form-control'}}) }}
+			    {{ form_errors(form.provincia) }}
+			</div>
+	    	<div class='col-lg-3 col-sm-12'>
+	    		{{ form_label(form.estructuras) }}
+		        {{ form_widget(form.estructuras, { 'attr' : {'class' : 'select-articulos'}}) }}
+		    </div>
+		</div>
+
+		<div class='form-row ml-4 mr-2 mt-2'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn btn-success'}}) }}
+		</div>
+    
+    {{ form_end(form) }}
+    <hr>
+    <div class="h3 mt-5 mb-2">Listado de ciudades</div>
+    <hr>
+	<table class="table table-hover table-bordered table-striped table-sm">
+	  <thead>
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">Ciudad</th>
+	      <th scope="col">Provincia</th>
+	      <th scope="col">Estado</th>
+	      <th scope="col"></th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for c in ciudades %}
+	  		<tr>
+	  			<td>{{ loop.index }}</td>
+	  			<td>{{ c|upper }}</td>
+	  			<td>{{ c.provincia|upper }}</td>
+	  			<td>
+	  				<div class="custom-control custom-switch">
+					  <input type="checkbox" 
+					  		 class="custom-control-input state" 
+					  		 {% if c.activo %}
+					  		 		checked 
+					  		 {% endif %}
+					  		 id="switch{{ loop.index }}"
+					  		 data-id="{{ c.id }}">
+					  <label class="custom-control-label" for="switch{{ loop.index }}">
+						  	<span id="span{{ c.id }}">
+							  	{% if c.activo %}
+			  						Activo
+				  				{% else %}
+				  					Inactivo
+				  				{% endif %}
+				  			</span>
+		  			  </label>
+					</div>	  				
+	  			</td>
+	  			<td class="text-center"><a href="{{ path('editar_cliente', {id : c.id}) }}" class="btn btn-sm btn-default">Editar</a></td>
+	  		</tr>
+	  	{% endfor %}
+	  </tbody>
+	</table>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+    <script src="{{ asset('resources/js/bootstrap-multiselect.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+			$('#example-selectAll-visible').on('click', function() {
+	            $('.select-articulos').multiselect('selectAll', true);
+	        });
+
+            $('.select-articulos').multiselect({
+              enableClickableOptGroups: true,
+              buttonWidth: '250px',
+              includeSelectAllOption: true
+            });
+        });
+    </script>
+{% endblock javascripts %}
+
+

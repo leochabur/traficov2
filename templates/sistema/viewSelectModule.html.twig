@@ -1,0 +1,62 @@
+{% block navbar_module %}
+    <div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar">
+        <div class="pl-4 pr-4">
+          <a href="#" class="img logo rounded-circle mb-5 mt-5" style="background-image: url({{ asset('resources/img/favicon-masterbus-150x150.png') }});"></a>
+          <ul class="list-unstyled components mb-5">
+
+            <li>
+              <a href="#menuUnidades" data-module='SEGVIAL' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Segutidad Vial</a>
+            </li>
+
+            <li>
+              <a href="#menuOpciones" data-module='RRHH' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo RRHH</a>
+            </li>
+
+            <li>
+              <a href="#menuOpciones" data-module='VENTAS' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Ventas</a>
+            </li>
+            <li>
+              <a href="#menuOpciones" data-module='TRAFICO' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Trafico</a>
+            </li>
+            <li>
+              <a href="#menuOpciones" data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Administrar Usuarios</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+            <div id="content" class="p-4 p-md-5">
+
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+
+
+
+
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    
+
+                  <ul class="nav navbar-nav ml-auto">
+                      <li class="nav-item dropdown"> 
+                          <a id="userIdMenu" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ app.user }}
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                      <li><a class="dropdown-item" href="{{ path('logout') }}">Cerrar Sesion</a></li>
+                                      <li><a class="dropdown-item" href="{{ path('select_estructura') }}">Cambiar Estructura</a></li>              
+                          </ul>   
+                      </li>
+                  </ul>
+
+                  </div>
+                </div>
+              </nav>
+{% endblock navbar_module %}
+
+
+{% block navbar_module_f %}
+            </div>
+    </div>
+{% endblock navbar_module_f %}

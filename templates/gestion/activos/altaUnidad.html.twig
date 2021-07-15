@@ -1,0 +1,340 @@
+{% extends 'sistema/base.html.twig' %}
+{% block title_module %}
+	{{ label }}
+{% endblock %}
+{% block content %}
+	{{ parent() }}
+
+		<style>
+            .holder {
+                height: 300px;
+                width: 300px;
+                border: 0px solid black;
+            }
+            .img {
+                max-width: 300px;
+                max-height: 300px;
+                min-width: 300px;
+                min-height: 300px;
+            }
+            input[type="file"] {
+                margin-top: 5px;
+            }
+            .heading {
+                font-family: Montserrat;
+                font-size: 45px;
+                color: green;
+            }
+
+
+			.fontReduce
+			{
+			  font-size: 0.75em;
+			}
+	</style>
+	{{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'fontReduce'}}) }}
+	<div class="row card">
+		<div class="col-lg-12 text-right">
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn btn-sm btn-success'}}) }}
+			<a class="btn btn-sm btn-danger btn-cancel">Cancelar</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-2 card">
+			<ul class="fa-ul pt-5 partial fontReduce">
+			  <li class="mt-3 {{ errors.general is defined ? 'text-danger' : ''}}">
+			  		<a data-title="Datos Generales" data-class="data-gen" class="firstA">
+			  						<span class="fa-li"><i class="far fa-calendar-check fa-lg"></i></span>Datos Generales
+			  		</a>
+			  </li>
+			  {% if form.details is defined %}
+					  <li class="mt-3 {{ errors.tecnical is defined ? 'text-danger' : ''}}">
+					  	<a data-title="Datos Tecnicos" data-class="data-cont"><span class="fa-li"><i class="fas fa-wrench fa-lg"></i></span>Datos Tecnicos</a></li>
+					  <li class="mt-3 {{ errors.inscription is defined ? 'text-danger' : ''}}">
+					  	<a data-title="Datos de Inscripcion" data-class="data-insc"><span class="fa-li"><i class="fas fa-balance-scale fa-lg"></i></span>Datos Inscripcion</a></li>
+					  <li class="mt-3"><a data-title="Otros Datos" data-class="data-otros"><span class="fa-li"><i class="fas fa-book"></i></span>Otros Datos</a></li>
+			  
+					  <li class="mt-3">
+					  		<a data-title="Imagen" data-class="data-img">
+					  						<span class="fa-li"><i class="far fa-image fa-lg"></i></span>Imagen
+					  		</a>
+					  </li>
+
+			  {% endif %}
+			</ul>
+
+		</div>
+		<div class="col-lg-10 card">
+		<div class="card-header card-title">
+		    Datos Generales
+		</div> 
+		    <div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
+		    	<div class=' col-lg-2 col-sm-12'>
+				    {{ form_label(form.interno) }}
+				    {{ form_widget(form.interno, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+				    
+				</div>   
+		    	<div class=' col-lg-2 col-sm-12'>
+				    {{ form_label(form.dominio) }}
+				    {{ form_widget(form.dominio, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+				    
+				</div>
+		    	<div class=' col-lg-4 col-sm-12'>
+				    {{ form_label(form.tipoUnidad) }}
+				    {{ form_widget(form.tipoUnidad, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+				    
+				</div>
+			</div>
+			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
+		    	<div class=' col-lg-6 col-sm-12'>
+				    {{ form_label(form.propietario) }}
+				    {{ form_widget(form.propietario, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+				</div>
+		    	<div class=' col-lg-6 col-sm-12'>
+				    {{ form_label(form.operadorResponsable) }}
+				    {{ form_widget(form.operadorResponsable, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+				</div>
+			</div>
+			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
+		    	<div class=' col-lg-4 col-sm-12'>
+				    {{ form_label(form.estructuraActual) }}
+				    {{ form_widget(form.estructuraActual, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+				</div>
+		    	<div class=' col-lg-4 col-sm-12'>
+				    {{ form_label(form.estructuraHabitual) }}
+				    {{ form_widget(form.estructuraHabitual, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+				</div>
+			</div>
+
+			<div class='form-row ml-4 mr-2 mt-2 data-img allComponent'>	 
+		    	<div class=' col-lg-4 col-sm-12 mb-2'>
+		    			{{ form_widget(form.imageFile, {'attr' : {'class' : 'photo'}}) }}
+
+			            <div class="holder mt-2">
+			                <img id="imgPreview" src="" alt="pic" class="img"/>
+			            </div>	    
+
+				</div>
+			</div>
+
+			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
+					{% if errors.general is defined %}
+						<ul class="fa-ul text-danger">
+							{% for e in errors.general %}
+						  <li><span class="fa-li"><i class="fas fa-times-circle"></i></span>{{ e }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+			</div>
+			{% if form.details is defined %}
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.calidadUnidad) }}
+					    {{ form_widget(form.calidadUnidad, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.chasisMarca) }}
+					    {{ form_widget(form.chasisMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.chasisModelo) }}
+					    {{ form_widget(form.chasisModelo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.chasisNumero) }}
+					    {{ form_widget(form.chasisNumero, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+				</div>
+
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.carroceriaMarca) }}
+					    {{ form_widget(form.carroceriaMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.carroceriaModelo) }}
+					    {{ form_widget(form.carroceriaModelo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.capacidadReal) }}
+					    {{ form_widget(form.capacidadReal, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.capacidadCNRT, 'Capacidad Habilitada') }}
+					    {{ form_widget(form.capacidadCNRT, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.tipoMotor) }}
+					    {{ form_widget(form.tipoMotor, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.motorMarca) }}
+					    {{ form_widget(form.motorMarca, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.motorNumero) }}
+					    {{ form_widget(form.motorNumero, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.consumo) }}
+					    {{ form_widget(form.consumo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.cantidadTanques) }}
+					    {{ form_widget(form.cantidadTanques, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.capacidadTanque, 'Capacidad Total') }}
+					    {{ form_widget(form.capacidadTanque, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.audioVideo) }}
+					    {{ form_widget(form.audioVideo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.banio, 'Baño') }}
+					    {{ form_widget(form.banio, { 'attr' : {'class' : 'form-control form-control-sm text-left'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.bar) }}
+					    {{ form_widget(form.bar, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-insc allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.fechaInscripcion) }}
+					    {{ form_widget(form.fechaInscripcion, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.anioModelo, 'Modelo Año') }}
+					    {{ form_widget(form.anioModelo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.radicacion) }}
+					    {{ form_widget(form.radicacion, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-otros allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.ploteo) }}
+					    {{ form_widget(form.ploteo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.carteleraElectronica) }}
+					    {{ form_widget(form.carteleraElectronica, { 'attr' : {'class' : 'form-control form-control-sm text-left'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.pcABordo) }}
+					    {{ form_widget(form.pcABordo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-otros allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.color) }}
+					    {{ form_widget(form.color, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+				</div>   
+
+				<div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>	 
+						{% if errors.tecnical is defined %}
+							<ul class="fa-ul text-danger">
+								{% for e in errors.tecnical %}
+							  <li><span class="fa-li"><i class="fas fa-times-circle"></i></span>{{ e }}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+				</div>
+			<div class='form-row ml-4 mr-2 mt-2 data-insc allComponent'>	 
+					{% if errors.inscription is defined %}
+						<ul class="fa-ul text-danger">
+							{% for e in errors.inscription %}
+						  <li><span class="fa-li"><i class="fas fa-times-circle"></i></span>{{ e }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+			</div>
+				
+			{% endif %}
+
+    {{ form_end(form) }}
+			
+		</div>
+	</div>
+{% endblock content %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+                $(".photo").change(function () {
+                    const file = this.files[0];
+                    if (file) {
+                        let reader = new FileReader();
+                        reader.onload = function (event) {
+                            $("#imgPreview")
+                              .attr("src", event.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+				$('.btn-cancel').click(function(){
+												bootbox.confirm({
+																message: "Seguro cancelar la carga de la unidad?",
+															    buttons: {
+															        confirm: {
+															            label: 'Si',
+															            className: 'btn-success btn-sm'
+															        },
+															        cancel: {
+															            label: 'No',
+															            className: 'btn-danger btn-sm'
+															        }
+															    },																													
+																callback: function(result){ 
+																								    if (result)
+																								    {
+																								    		window.location.href = "{{ path('activos_listado_unidades') }}";
+																								    } 
+																								}
+																});
+				});
+
+				$(':text, select').addClass('form-control-sm');
+				$('.partial li a').click(function(){
+														$('.partial li').each(function(e){ $(this).removeClass('text-primary') });
+														var a = $(this);
+														a.parent().addClass('text-primary');
+														var visible = a.data('class');
+														var title = a.data('title');
+														$('.card-title').html(title);
+														$('.allComponent').hide();
+														$('.'+visible).show();
+													
+				});
+				
+				$('.firstA').trigger('click');
+
+				$( ".cuit" ).inputmask({
+										mask: '99-99999999-9',
+										placeholder: '99-99999999-9',
+										showMaskOnHover: true,
+										showMaskOnFocus: true
+									  });
+    		
+
+
+		    
+});
+
+
+</script>
+{% endblock javascripts %}
+

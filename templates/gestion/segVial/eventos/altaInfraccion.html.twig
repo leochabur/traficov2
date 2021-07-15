@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+{% set mutipleselect = true %}
+{% block stylesheets %}
+  {{ parent() }}
+  
+
+  <style type="text/css">
+input::-webkit-input-placeholder {
+    font-size: 5px;
+    line-height: 4;
+}
+  </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="h4 mt-5 mb-3">Nueva Infraccion</div>
+    <hr>
+    {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light', 'class' : 'p-2'}}) }}
+
+    	{% include '@Gestion/segVial/utils/evento.html.twig' with { 'form': form } %}
+
+	    <div class='form-row mt-2'>	
+	    	<div class=' col-lg-3 col-sm-12'> 
+			    {{ form_label(form.tipoInfraccion) }}
+			    {{ form_widget(form.tipoInfraccion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.tipoInfraccion) }}</div>
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.numeroActa) }}
+			    {{ form_widget(form.numeroActa, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.numeroActa) }}</div>
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+
+			</div> 
+		</div>
+	    <div class='form-row mt-4'>	
+	    	<div class=' col-lg-3 col-sm-12'> 
+	  				<div class="custom-control custom-switch">
+	  					{{ form_widget(form.notificado, { 'attr' : {'class' : 'custom-control-input'}}) }}
+	  					{{ form_label(form.notificado, 'Notificado', { 'label_attr': {'class': 'custom-control-label'} } ) }}
+	  					
+					</div>	
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+	  				<div class="custom-control custom-switch">
+	  					{{ form_widget(form.aceptada, { 'attr' : {'class' : 'custom-control-input'}}) }}
+	  					{{ form_label(form.aceptada, 'Aceptada', { 'label_attr': {'class': 'custom-control-label'} } ) }}
+	  					
+					</div>	
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+	  				<div class="custom-control custom-switch">
+	  					{{ form_widget(form.descontada, { 'attr' : {'class' : 'custom-control-input'}}) }}
+	  					{{ form_label(form.descontada, 'Descontada', { 'label_attr': {'class': 'custom-control-label'} } ) }}
+	  					
+					</div>	
+			</div> 
+		</div>
+	    <div class='form-row mt-2'>	
+	    	<div class=' col-lg-3 col-sm-12'> 
+			    {{ form_label(form.vencimiento) }}
+			    {{ form_widget(form.vencimiento, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.vencimiento) }}</div>
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+			    {{ form_label(form.fechaPago) }}
+			    {{ form_widget(form.fechaPago, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.fechaPago) }}</div>
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+
+			</div> 
+		</div>
+	    <div class='form-row mt-2'>	
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.montoInicial) }}
+			    {{ form_widget(form.montoInicial, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.montoInicial) }}</div>
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.montoAbonado) }}
+			    {{ form_widget(form.montoAbonado, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.montoAbonado) }}</div>
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.cuotas) }}
+			    {{ form_widget(form.cuotas, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.cuotas) }}</div>
+			</div> 
+		</div>
+		<hr>
+		<div class='form-row ml-4 mr-2 mt-2 align-right'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn danger-color-dark text-white'}}) }}
+		</div>
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+		<script type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWxzUoadM_CcbqLBeqGp2xMYfSjyMJ-M&libraries=places"> </script>
+
+		<script src="{{ asset('resources/js/menuPosition.js') }}"></script>
+
+		
+
+		<script type="text/javascript">
+		    $(document).ready(function() {
+		        $('.select-tripulacion').multiselect({
+		          enableClickableOptGroups: true,
+		          buttonWidth: '400px'
+		        });
+		    });
+		</script>
+{% endblock javascripts %}
+

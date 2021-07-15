@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+	{{ parent() }}
+    <div class="h4 mt-5 mb-2">Listado de unidades</div>
+    {% include '@Gestion/messages.html.twig'  %}
+    <hr>
+
+			<table class="table table-hover table-bordered table-striped table-sm">
+			  <thead>
+			    <tr>
+			      <th scope="col">Propietario</th>
+			      <th scope="col">Interno</th>
+			      <th scope="col">Dominio</th>
+			      <th scope="col">Capacidad</th>
+			      <th scope="col"></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for s in unidades %}
+			  		<tr>
+			  			<td>
+			  				{{ s.propietario|upper }}
+			  				{% if not s.confirmado %}
+			  					<span class="class="text-right""><i class="fas fa-exclamation-triangle" title="Pendiente de carga"></i></span>
+			  				{% endif %}
+			  			</td>
+			  			<td>{{ s.interno|upper }}</td>
+			  			<td>{{ s.dominio|upper }}</td>
+			  			<td>{{ s.capacidadReal }}</td>
+			  			<td class="text-center">
+			  					<a href="{{ path('editar_unidad', {id : s.id}) }}" class="btn btn-sm danger-color-dark text-white">Editar</a>
+			  			</td>
+			  		</tr>
+			  	{% endfor %}
+			  </tbody>
+			</table>
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+

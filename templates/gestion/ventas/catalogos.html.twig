@@ -1,0 +1,206 @@
+{% extends 'base.html.twig' %}
+{% set mutipleselect = true %}
+{% set datatable = true %}
+{% block title_module %}
+	Catalogos ventas
+{% endblock %}
+
+{% block styles %}
+	<style>
+			.fontReduce
+			{
+			  font-size: 0.75em;
+			}
+</style>
+	{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+	<br>
+<div class="accordion mt-2" id="accordionExample275">
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header">
+    		<i class="fas fa-archive"></i>
+        <a class="collapsed">
+          Catalogos
+        </a>
+        <hr>
+    </div>
+   </div>
+
+  <div class="card z-depth-0 ">
+    <div class="card-header" id="headingOne2">
+    	<div class="row">
+    		<div class="col-lg-6">
+    			Ciudades
+      </div>
+      <div class="col-lg-6 text-right">
+	        <a class="collapsed" data-toggle="collapse" data-target="#collapseOne2"
+	          aria-expanded="true" aria-controls="collapseOne2">
+	          <i class="fas fa-angle-down fa-lg"></i>
+	        </a>
+      	
+      </div>
+      </div>
+    </div>
+    <div id="collapseOne2" class="collapse" aria-labelledby="headingOne2"
+      data-parent="#accordionExample275">
+      <div class="card-body">
+						<div class="card nav-f-city">
+							<div class="row pt-2 pb-2">
+								
+											<div class="col-lg-6">
+												<div class="row">
+														<div class="col-lg-1 align-middle mt-2 ml-2">
+																<a class='btn-filter'><i class="fas fa-filter"></i></a>
+														</div>
+														<div class="col-lg-6 align-middle mt-2">
+																
+														</div>
+												</div>
+											</div>
+											<div class="col d-flex align-items-end">
+													<a class="btn btn-sm round btn-success align-middle show-f-city"><i class="fas fa-plus mr-1"></i>Agregar</a>
+													<a class="btn-edit btn btn-sm round btn-primary align-middle"><i class="fas fa-pencil-alt mr-1"></i>Editar</a>
+													<a class="btn btn-sm btn-blue-grey">Opciones</a>
+											</div>
+								
+
+							</div>
+						</div>
+						<div class="card form-city d-none">
+								{{ form_start(fCiudad, {'attr' : {'novalidate' : 'novalidate', 'class' : 'fcityadd' }}) }}
+								<div class="row ml-2">
+									<div class="col-lg-3">
+											{{ form_label(fCiudad.nombre) }}
+											{{ form_widget(fCiudad.nombre, {'attr' : {'class' : 'form-control'}}) }}
+									</div>
+									<div class="col-lg-3">
+											{{ form_label(fCiudad.provincia) }}
+											{{ form_widget(fCiudad.provincia, {'attr' : {'class' : 'form-control'}}) }}
+									</div>
+									<div class="col-lg-3">
+											{{ form_label(fCiudad.estructuras) }}
+											{{ form_widget(fCiudad.estructuras, {'attr' : {'class' : 'form-control form-control-sm select-tripulacion'}}) }}
+									</div>
+								</div>
+								<div class="row ml-2">
+										{% include '@Gestion/segVial/utils/menuPosition.html.twig' with {'form': fCiudad, 'classLt' : 'col-lg-3', 'classLg' : 'col-lg-3' } %}
+								</div>
+								<div class="row ml-2 f-erros-city fontReduce">
+								</div>
+								<div class="row ml-3 mt-2">
+									<div class="d-inline">
+											{{ form_widget(fCiudad.guardar, {'attr' : {'class' : 'btn btn-sm btn-success f-city-save'}}) }}
+									</div>
+									<div class="d-inline">
+											<a class="btn btn-sm btn-danger hide-f-city">Cancelar</a>
+									</div>
+								</div>
+								{{ form_end(fCiudad) }}
+
+								
+						</div>
+						<div class="card mt-1 nav-f-city">
+								<div class="col-lg-2 mb-2">
+										<div class="row">
+
+										</div>
+								</div>
+								<table id="dt-filter-select" class="table table-sm table-hover table-striped table-bordered ml-1 mr-1" cellspacing="0" width="100%">
+
+								  <thead>
+								    <tr>
+								      <th scope="col"></th>
+								      <th scope="col">Ciudad</th>
+								      <th scope="col">Provincia</th>
+								    </tr>
+								  </thead>
+								  <tbody>
+								  	{% for c in cityList %}
+								  		<tr>
+								  			<td>{{ loop.index}}</td>
+								  			<td>{{ c.ciudad|upper }}</td>
+								  			<td>{{ c.provincia|upper }}</td>
+								  		</tr>
+								  	{% endfor %}
+								  </tbody>
+								</table>
+					</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+		<script type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWxzUoadM_CcbqLBeqGp2xMYfSjyMJ-M&libraries=places"> </script>
+
+		<script src="{{ asset('resources/js/menuPosition.js') }}"></script>
+
+	<script type="text/javascript">
+			  $(document).ready(function() {
+
+			  		$('.f-city-save').click(function(event){
+			  																						event.preventDefault();
+			  																						var form = $(this).closest('form');
+			  																						$.post("{{ path('alta_ciudad_procesar') }}",
+			  																								   form.serialize(),
+			  																								   function(data){
+			  																								   								if (!data.status)
+			  																								   								{
+					  																								   								var errors = data.errors;			  																								   								
+					  																								   								var ul = $("<ul class='fa-ul text-danger fontReduce'/>");
+					  																								   								for(var x in errors)
+																																							{
+																																									ul.append('<li class="fontReduce"><span class="fa-li"><i class="fas fa-times-circle"></i></span>'+errors[x][0]+'</li>');
+					  																								   								}				
+					  																								   								$('.f-erros-city').html(ul);
+			  																								   								}
+			  																								   								else
+			  																								   								{
+			  																								   										$('#dt-filter-select tbody').append('<tr><td></td><td>'+data.city.ciudad+'</td><td>'+data.city.provincia+'</td></tr>');
+			  																								   										$('.fcityadd').get(0).reset();
+			  																								   										$('.form-city').addClass('d-none');
+			  																																			$('.nav-f-city').removeClass('d-none');																			   									  
+			  																								   								}
+			  																								   							
+			  																								   });
+			  		});
+
+			  		$('.hide-f-city').click(function(){
+			  																				$('.form-city').addClass('d-none');
+			  																				$('.nav-f-city').removeClass('d-none');
+			  		});
+
+			  		$('.show-f-city').click(function(){
+			  																				$('.form-city').removeClass('d-none');
+			  																				$('.nav-f-city').addClass('d-none');
+			  		});
+
+
+		        $('.select-tripulacion').multiselect({
+		          enableClickableOptGroups: true,
+		          buttonWidth: '300px',
+		        });
+
+					 var table = $('#dt-filter-select').dataTable({          	    																		
+			    													"pagingType": "first_last_numbers",																		  
+																	"info" : false,
+																	 dom: "t",
+																	"lengthChange": false,
+																	"bFilter" : true,
+																	"language": {
+															    				"paginate": {
+																						      "first": "Primera",
+																						      "last": "Ultima"
+																						    }
+																	  			}
+	  				});
+		    });
+
+	</script>
+{% endblock javascripts %}
+

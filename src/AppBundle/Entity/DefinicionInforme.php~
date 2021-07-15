@@ -1,0 +1,76 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DefinicionInforme
+ *
+ * @ORM\Table(name="perfil_definicion_informe")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DefinicionInformeRepository")
+ */
+class DefinicionInforme
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="informes")
+     * @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
+     */
+    private $usuario;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CampoInforme", mappedBy="informe")
+     */
+    private $campos;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return DefinicionInforme
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+}
+

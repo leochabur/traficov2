@@ -1,0 +1,165 @@
+{% extends 'sistema/base.html.twig' %}
+{% set datatable = true %}
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ asset('resources/css/style.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title_module %}
+	Listado Unidades
+{% endblock %}
+
+{% block content %}
+		<div class="card">
+			<div class="row pt-2 pb-2">
+				
+							<div class="col-lg-6">
+								<div class="row">
+										<div class="col-lg-1 align-middle mt-2 ml-2">
+												<a class='btn-filter'><i class="fas fa-filter"></i></a>
+										</div>
+										<div class="col-lg-6 align-middle mt-2">
+												
+										</div>
+								</div>
+							</div>
+							<div class="col d-flex align-items-end">
+									<a class="btn btn-sm round btn-success align-middle" href="{{ path('activos_alta_unidad') }}"><i class="fas fa-plus mr-1"></i>Agregar</a>
+
+									<a class="btn btn-sm round btn-danger align-middle"><i class="fas fa-trash-alt mr-1"></i>Elimnar</a>
+									<a class="btn btn-sm btn-blue-grey">Opciones</a>
+							</div>
+				
+
+			</div>
+		</div>
+		<div class="card mt-1">
+				<div class="col-lg-2 mb-2">
+						<div class="row">
+
+						</div>
+				</div>
+		<table id="dt-filter-select" class="table table-sm table-hover table-striped table-bordered ml-1 mr-1" cellspacing="0" width="100%">
+
+		  <thead>
+                    <tr class="filters" style="display: none;">
+                        <th colspan="2" class="p-2 align-middle">Filtrar</th>
+                        <th class="p-2"><input type="text" class="form-control form-control-sm p-2" placeholder="Razon Social"></th>
+                        <th class="p-2"><input type="text" class="form-control form-control-sm p-2" placeholder="Nombre Fantasia"></th>
+                        <th class="p-2"><input type="text" class="form-control form-control-sm p-2" placeholder="Estado"></th>
+                    </tr>
+		    <tr>
+		      <th scope="col"></th>
+		      <th scope="col">Interno</th>
+		      <th scope="col">Propietario</th>
+		      <th scope="col">Marca Chasis</th>
+		      <th scope="col">Dominio</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for u in unidades %}
+		  		<tr>
+		  			<td><a href="{{ path('activos_actualizar_unidad', { id : u.id }) }}"><i class="fas fa-pencil-alt"></i></a></td>
+		  			<td>{{ u.interno }}</td> 			
+		  			<td>{{ u.propietario|upper }}</td>
+		  			<td>{{ u.chasisMarca|upper }}</td>
+		  			<td>{{ u.dominio|upper }}</td>
+		  		</tr>
+		  	{% endfor %}
+		  </tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+		
+		$(document).ready(function(){
+
+				const route_edit = "{{ path('editar_cliente', { id : 'CLIENTE_ID'}) }}";
+
+				$('.btn-edit').click(function(event){
+														event.preventDefault();
+														var chk = $("input[name='clientes']:checked").data('cliente');
+														if (chk)
+														{
+															window.location.href = route_edit.replace('CLIENTE_ID', chk);
+														}
+														else
+														{
+															bootbox.message('dsadsadasd');
+														}
+				});
+
+				$('.btn-filter').click(function(){
+											        $('.filters').toggle(50,function() {
+
+											        });
+				});
+
+
+			    $('#dt-filter-select thead tr:eq(0) th').each( function (i) {
+			        var title = $(this).text();
+
+			        $( 'input', this ).on( 'keyup change', function () {
+			            if ( table.api().column((i+1)).search() !== this.value ) {
+			                table
+			                	.api()
+			                    .column((i+1))
+			                    .search( this.value )
+			                    .draw();
+			            }
+			        } );
+			    } );
+
+				const route = "{{ path('cliente_change_state', { id : 'CLIENTE_ID'}) }}";
+
+				 var table = $('#dt-filter-select').dataTable({          																		 
+		    													"paging": true,
+																"info" : false,
+																"searching": false,
+																"lengthChange": false,
+																"bFilter" : true,
+																"language": {
+														    				"paginate": {
+																					      "first": "Primera",
+																					      "last": "Ultima",
+																					      "previous" : "Anterior",
+																					      "next" : "Siguiente"
+																					    }
+																  			}
+  				});
+
+				$('.state').change(function(){
+											   const btn = $(this);
+											   const id = btn.data('id');
+											   let idroute = route.replace('CLIENTE_ID', id);
+											   const state = (btn.is(':checked') == true)?1:0;
+											   $.post(idroute,
+											   		  {'state' : state},
+											   		  function(data){
+											   		  		if(data.status)
+											   		  		{
+											   		  			if (state)
+											   		  			{
+											   		  				$('#span'+id).html('Activo');
+											   		  			}
+											   		  			else
+											   		  			{
+											   		  				$('#span'+id).html('Inactivo');
+											   		  			}
+											   		  		}
+											   		  		else
+											   		  		{
+											   		  			alert(data.message);
+											   		  		}
+											   		  });
+											   
+				});
+		});
+
+</script>
+{% endblock %}
+

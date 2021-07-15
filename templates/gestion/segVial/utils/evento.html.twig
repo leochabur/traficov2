@@ -1,0 +1,86 @@
+	    <div class='form-row mt-2'>	
+	    	<div class=' col-lg-3 col-sm-12'> 
+			    {{ form_label(form.evento.estructura) }}
+			    {{ form_widget(form.evento.estructura, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.evento.prefijo) }}
+			    {{ form_widget(form.evento.prefijo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			</div>
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.evento.numero) }}
+			    {{ form_widget(form.evento.numero, { 'attr' : {'class' : 'dominio form-control text-uppercase form-control-sm'}}) }}
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'>
+			    {{ form_label(form.evento.fecha) }}
+			    {{ form_widget(form.evento.fecha, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.evento.fecha) }}</div>
+			</div>
+	    	<div class=' col-lg-2 col-sm-12'>
+			    {{ form_label(form.evento.hora) }}
+			    {{ form_widget(form.evento.hora, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.evento.hora) }}</div>
+			</div>			
+		</div>
+	    <div class='form-row mt-2'>	 
+	    	<div class=' col-lg-12 col-sm-12'> 
+			    {{ form_label(form.evento.descripcion) }}
+			    {{ form_widget(form.evento.descripcion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			</div>
+		</div>
+	    <div class='form-row mt-2'>	 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.evento.unidad) }}
+			    <br>
+			    {{ form_widget(form.evento.unidad, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'> 
+			    {{ form_label(form.evento.tripulacion) }}
+			    <br>
+			    {{ form_widget(form.evento.tripulacion, { 'attr' : {'class' : 'form-control-sm text-uppercase select-tripulacion'}}) }}
+			</div>
+		</div>
+		<div class='form-row mt-2'>	 
+	    	<div class=' col-lg-4 col-sm-12'> 
+			    {{ form_label(form.evento.cliente) }}
+			    {{ form_widget(form.evento.cliente, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			</div>
+	    	<div class=' col-lg-4 col-sm-12'> 
+			    {{ form_label(form.evento.cliente, 'Servicio') }}
+			</div>
+		</div>
+		<hr>
+		<span class="h5">Ubicacion</span>
+	    <div class='form-row mt-2'>	 
+	    	<div class=' col-lg-12 col-sm-12'> 
+	  				<div class="custom-control custom-switch">
+					  <input type="checkbox" 
+					  		 class="custom-control-input state"
+					  		 id="inside">
+					  <label class="custom-control-label" for="inside">
+						  	<span>
+						  		Dentro de Master?
+				  			</span>
+		  			  </label>
+					</div>	
+			</div>
+		</div>
+	    <div class='form-row mt-2'>	
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.evento.ubicacion.calle) }}
+			    {{ form_widget(form.evento.ubicacion.calle, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.evento.ubicacion.calle) }}</div>
+			</div> 
+	    	<div class=' col-lg-2 col-sm-12'> 
+			    {{ form_label(form.evento.ubicacion.interseccion) }}
+			    {{ form_widget(form.evento.ubicacion.interseccion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.evento.ubicacion.interseccion) }}</div>
+			</div> 
+	    	<div class=' col-lg-3 col-sm-12'> 
+			    {{ form_label(form.evento.ubicacion.ciudad) }}
+			    {{ form_widget(form.evento.ubicacion.ciudad, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+			    <div class="text-danger">{{ form_errors(form.evento.ubicacion.ciudad) }}</div>
+			</div> 
+			{% include '@Gestion/segVial/utils/menuPosition.html.twig' with {'form': form.evento.ubicacion, 'posLt' : 'positionLn', 'posLn' : 'positionLt' } %}
+		</div>
+		<hr>

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="h4 mt-5 mb-5">{{ label }} Calidad Unidad</div>
+    <hr>
+    {% include '@Gestion/messages.html.twig'  %}
+    {{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'border border-light'}}) }} 
+	    <div class='form-row ml-4 mr-2 mt-2'>	 
+	    	<div class=' col-lg-5 col-sm-12'>
+			    {{ form_label(form.calidad) }}
+			    {{ form_widget(form.calidad, { 'attr' : {'class' : 'form-control'}}) }}
+			    <div class="text-danger">{{ form_errors(form.calidad) }}</div>
+			</div>   
+		</div>
+
+		<div class='form-row ml-4 mr-2 mt-2'>
+			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn danger-color-dark text-white'}}) }}
+		</div>
+    
+    {{ form_end(form) }}
+    {% if edit is not defined %}
+	    <hr>
+		<table class="table table-hover table-bordered table-striped table-sm">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Calidad Unidad</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for s in calidades %}
+		  		<tr>
+		  			<td>{{ loop.index }}</td>
+		  			<td>{{ s|upper }}</td>
+		  			<td class="text-center">
+		  					<a href="{{ path('editar_calidad_unidad', {id : s.id}) }}" class="btn btn-sm danger-color-dark text-white">Editar</a>
+		  			</td>
+		  		</tr>
+		  	{% endfor %}
+		  </tbody>
+		</table>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+

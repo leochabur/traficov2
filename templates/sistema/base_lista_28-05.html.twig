@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    <title>{% block title %}Sistema de Gestion{% endblock %}</title>
+
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('resources/img/favicon.png') }}" />
+
+  {% if fontawesome is not defined %}
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  {% endif %}
+
+  <link rel="stylesheet" href="{{ asset('resources/css/bootstrap.min.css') }}" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ asset('resources/css/mdb.min.css') }}" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ asset('resources/css/style.css') }}" rel="stylesheet">
+  
+  <link href="{{ asset('resources/css/addons/datatables.min.css') }}" rel="stylesheet">
+
+    <style type="text/css">
+
+.navbar {
+  padding: 15px 10px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 40px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+  box-shadow: none;
+  outline: none !important;
+  border: none;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dashed #ddd;
+  margin: 40px 0;
+}
+
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+#sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background: #272424;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#sidebar a,
+#sidebar a:hover,
+#sidebar a:focus {
+  color: inherit;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+
+}
+
+#sidebar ul.components {
+  padding: 20px 0;
+  border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+
+#sidebar ul li a:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
+  color: #fff;
+  background: #6d7fcc;
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
+
+ul ul a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: #6d7fcc;
+}
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+  padding: 20px;
+  min-height: 100vh;
+  transition: all 0.3s;
+}
+
+#content p a {
+  color:
+}
+
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #sidebarCollapse span {
+    display: none;
+  }
+}
+    </style>
+</head>
+
+<body>
+{% if (is_granted('IS_AUTHENTICATED_FULLY')) and (show_nav is not defined) %}
+
+
+
+
+<div class="wrapper">
+  <nav id="sidebar">
+
+    {% include 'basetopnav.html.twig' %}
+  </nav>
+
+{% else %}
+  <div class="content">
+{% endif %}
+  <div id="content">
+      <div class="container-fluid pl-5 pr-5">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    </div>
+  </div>
+
+
+<script src="{{ asset('resources/js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ asset('resources/js/popper.min.js') }}"></script>
+<script src="{{ asset('resources/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('resources/js/mdb.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('resources/js/addons/datatables.min.js') }}"></script>
+<script src="{{ asset('resources/js/bootbox.all.min.js') }}"></script>
+
+<script src="{{ asset('resources/sidebar/js/main.js') }}"></script>
+
+{% if fontawesome is not defined  %}
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" 
+                  integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" 
+                  crossorigin="anonymous">
+    </script>
+{% endif %}
+
+{% if inputmask is not defined %}
+    <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <script src="{{ asset('resources/js/jquery.inputmask.bundle.js') }}"></script>
+{% endif %}
+
+{% block javascripts %}{% endblock %}
+
+
+<script type="text/javascript">
+
+  $('.view-module').click(function(event){
+        event.preventDefault();
+        var mod = $(this);
+
+        $.post("{{ path('set_session_menu') }}",
+               {module : mod.data('module')},
+               function(data){
+                              console.log(data);
+                              window.location.href = data.route;
+               });
+  });
+
+$('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+                                                                if (!$(this).next().hasClass('show')) {
+                                                                  $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                                                                }
+                                                                var $subMenu = $(this).next(".dropdown-menu");
+                                                                $subMenu.toggleClass('show');
+
+
+  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+    $('.dropdown-submenu .show').removeClass("show");
+  });
+
+
+  return false;
+});
+
+</script>
+</body>
+</html>

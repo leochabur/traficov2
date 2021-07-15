@@ -1,0 +1,35 @@
+{% block navbar_module %}
+    <div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar">
+        <div class="pl-4 pr-4">
+          <a href="#" class="img logo rounded-circle mb-5 mt-5" style="background-image: url({{ asset('resources/img/favicon-masterbus-150x150.png') }});"></a>
+          <ul class="list-unstyled components mb-5">
+
+            <li>
+              <a href="#menuUnidades" data-module='SEGVIAL' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Segutidad Vial</a>
+            </li>
+
+            <li>
+              <a href="#menuOpciones" data-module='RRHH' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo RRHH</a>
+            </li>
+
+            <li>
+              <a href="#menuOpciones" data-module='VENTAS' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Ventas</a>
+            </li>
+            <li>
+              <a href="#menuOpciones" data-module='TRAFICO' data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Modulo Trafico</a>
+            </li>
+            <li>
+              <a href="#menuOpciones" data-toggle="collapse" aria-expanded="false" class="view-module dropdown-toggle">Administrar Usuarios</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      {% use 'navBarUser.html.twig' %}
+      {% block user %}
+          {{ parent() }}
+      {% endblock user %}
+    </div>
+
+{% endblock navbar_module %}
