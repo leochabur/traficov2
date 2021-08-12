@@ -1,0 +1,114 @@
+{% extends 'sistema/base.html.twig' %}
+{% set datatable = true %}
+{% block stylesheets %}
+
+	<link rel="stylesheet" href="{{ asset('resources/css/style.css') }}" rel="stylesheet">
+	<style>
+            .holder {
+                height: 200px;
+                width: 200px;
+                border: 0px solid black;
+            }
+            .img {
+                max-width: 300px;
+                max-height: 300px;
+                min-width: 300px;
+                min-height: 300px;
+            }
+            input[type="file"] {
+                margin-top: 5px;
+            }
+            .heading {
+                font-family: Montserrat;
+                font-size: 45px;
+                color: green;
+            }
+
+
+			.fontReduce
+			{
+			  font-size: 0.75em;
+			}
+	</style>
+{% endblock %}
+
+{% block title_module %}
+	Documentacion Unidades - Interno {{ unidad }}
+{% endblock %}
+
+{% block content %}
+		
+		<div class="card">
+			{{ form_start(docForm, {'attr' : {'novalidate' : 'novalidate', 'class' : 'ml-2'}})}}
+			<div class="row pt-2 pb-2">
+				<div class="col-lg-4">
+					{{ form_label(docForm.tipoDocumento) }}
+					{{ form_widget(docForm.tipoDocumento, {'attr' : {'class' : 'form-control form-control-sm'}}) }}				
+				</div>
+			</div>
+			<div class="row pt-2 pb-2">
+				<div class="col-lg-4">
+					{{ form_widget(docForm.imageFile, {'attr' : {'class' : 'photo'}}) }}				
+				</div>
+			</div>
+			<div class="row pt-2 pb-2 ml-2">
+	            <div class="holder mt-2">
+	                <img id="imgPreview" src="{% if image is defined %}{{ asset(image) }}{% endif %}" alt="pic" class="img"/>
+	            </div>	  
+			</div>
+			<div class="row pt-2 pb-2">
+				<div class="col-lg-4">
+					{{ form_widget(docForm.guardar, {'attr' : {'class' : 'btn btn-primary btn-sm'}}) }}				
+				</div>
+			</div>
+			{{ form_end(docForm) }}
+		</div>
+		
+		<div class="card mt-1">
+				<table id="dt-filter-select" class="table table-sm table-hover table-striped table-bordered ml-1 mr-1" cellspacing="0" width="100%">
+					  <thead>
+			                    <tr>
+			                        <th class="p-2">Tipo Documento</th>
+			                        <th class="p-2">Preview</th>
+			                        <th></th>
+			                    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for i in unidad.documentos %}
+					  		<tr>
+					  			<td class="align-middle">{{i.tipoDocumento}}</td>
+					  			<td>
+					  				<img src="{{ asset(i.imagen) }}" alt="thumbnail" class="img-thumbnail" style="width: 200px">
+					  			</td>
+					  			<td class="align-middle text-center">
+					  				<input type="button" class="btn btn-warning btn-sm" value="Eliminar"/>
+					  			</td>
+					  		</tr>
+					  	{% endfor %}
+					  </tbody>
+				</table>
+		</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+		
+		$(document).ready(function(){
+
+                $(".photo").change(function () {
+                    const file = this.files[0];
+                    if (file) {
+                        let reader = new FileReader();
+                        reader.onload = function (event) {
+                            $("#imgPreview")
+                              .attr("src", event.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+		});
+
+</script>
+{% endblock %}
+

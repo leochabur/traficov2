@@ -2,7 +2,20 @@
 
 namespace GestionBundle\Entity\segVial;
 
+use AppBundle\Entity\Estructura;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\opciones\DocumentoAdjunto;
+use GestionBundle\Entity\opciones\TipoVencimiento;
+use GestionBundle\Entity\opciones\TipoVencimientoUnidad;
+use GestionBundle\Entity\rrhh\Propietario;
+use GestionBundle\Entity\segVial\opciones\CalidadUnidad;
+use GestionBundle\Entity\segVial\opciones\MarcaChasis;
+use GestionBundle\Entity\segVial\opciones\TipoHabilitacionUnidad;
+use GestionBundle\Entity\segVial\opciones\TipoMotor;
+use GestionBundle\Entity\segVial\opciones\TipoUnidad;
+use GestionBundle\Entity\ventas\Provincia;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -287,7 +300,19 @@ class Unidad
      */
     private $confirmado = false;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\opciones\TipoVencimientoUnidad")
+     * @ORM\JoinTable(name="seg_vial_unidades_tipos_vencimientos",
+     *      joinColumns={@ORM\JoinColumn(name="id_unidad", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_tipo_vto", referencedColumnName="id")}
+     *      )
+     */
+    private $tiposVencimientos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="GestionBundle\Entity\opciones\DocumentoAdjunto", mappedBy="unidad") 
+     */
+    private $documentos;
 
     public function __toString()
     {
@@ -933,6 +958,9 @@ class Unidad
     public function __construct()
     {
         $this->habilitaciones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tiposVencimientos = new ArrayCollection();
+        $this->documentos = new ArrayCollection();
+
     }
 
     /**
@@ -1155,5 +1183,53 @@ class Unidad
     public function getImagen()
     {
         return $this->imagen;
+    }
+
+    /**
+     * @return Collection|TipoVencimiento[]
+     */
+    public function getTiposVencimientos(): Collection
+    {
+        return $this->tiposVencimientos;
+    }
+
+    public function addTiposVencimiento(TipoVencimiento $tiposVencimiento): self
+    {
+        if (!$this->tiposVencimientos->contains($tiposVencimiento)) {
+            $this->tiposVencimientos[] = $tiposVencimiento;
+        }
+
+        return $this;
+    }
+
+    public function removeTiposVencimiento(TipoVencimiento $tiposVencimiento): self
+    {
+        $this->tiposVencimientos->removeElement($tiposVencimiento);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DocumentoAdjunto[]
+     */
+    public function getDocumentos(): Collection
+    {
+        return $this->documentos;
+    }
+
+    public function addDocumento(DocumentoAdjunto $documento): self
+    {
+        if (!$this->documentos->contains($documento)) {
+            $this->documentos[] = $documento;
+        }
+
+        return $this;
+    }
+
+    public function removeDocumento(DocumentoAdjunto $documento): self
+    {
+        $this->documentos->removeElement($documento);
+
+        return $this;
     }
 }

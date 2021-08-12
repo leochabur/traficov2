@@ -1,4 +1,5 @@
 {% extends 'sistema/base.html.twig' %}
+{% set mutipleselect = true %}
 {% block title_module %}
 	{{ label }}
 {% endblock %}
@@ -59,7 +60,11 @@
 					  						<span class="fa-li"><i class="far fa-image fa-lg"></i></span>Imagen
 					  		</a>
 					  </li>
-
+					  <li class="mt-3">
+					  		<a data-title="Logs" data-class="data-logs">
+					  						<span class="fa-li"><i class="far fa-image fa-lg"></i></span>Logs
+					  		</a>
+					  </li>
 			  {% endif %}
 			</ul>
 
@@ -105,13 +110,12 @@
 				    {{ form_widget(form.estructuraHabitual, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
 				</div>
 			</div>
-
 			<div class='form-row ml-4 mr-2 mt-2 data-img allComponent'>	 
 		    	<div class=' col-lg-4 col-sm-12 mb-2'>
 		    			{{ form_widget(form.imageFile, {'attr' : {'class' : 'photo'}}) }}
 
 			            <div class="holder mt-2">
-			                <img id="imgPreview" src="" alt="pic" class="img"/>
+			                <img id="imgPreview" src="{% if image is defined %}{{ asset(image) }}{% endif %}" alt="pic" class="img"/>
 			            </div>	    
 
 				</div>
@@ -220,6 +224,13 @@
 					    {{ form_widget(form.radicacion, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
 					</div>
 				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-insc allComponent'>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.tiposVencimientos) }}
+					    <br>
+					    {{ form_widget(form.tiposVencimientos, { 'attr' : {'class' : 'form-control form-control-sm multiple-select'}}) }}
+					</div>
+				</div>
 			    <div class='form-row ml-4 mr-2 mt-2 data-otros allComponent'>
 			    	<div class=' col-lg-4 col-sm-12'>
 					    {{ form_label(form.ploteo) }}
@@ -259,7 +270,15 @@
 						</ul>
 					{% endif %}
 			</div>
-				
+				{% if paginator is defined %}	
+					<div class='form-row ml-4 mr-2 mt-2 data-logs allComponent'>	 
+						<div class=' col-lg-12 col-sm-12'>
+					            {% for entry in paginator.results %}
+						            {{ include('audit/entry.html.twig', {'entry': entry}) }}
+						        {% endfor %}
+						</div>
+					</div>
+				{% endif %}
 			{% endif %}
 
     {{ form_end(form) }}
@@ -329,7 +348,9 @@ $(document).ready(function(){
 										showMaskOnFocus: true
 									  });
     		
-
+$('.multiple-select').multiselect({
+            buttonWidth: '400px'
+        });
 
 		    
 });

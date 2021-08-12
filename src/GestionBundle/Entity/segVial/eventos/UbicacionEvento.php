@@ -3,6 +3,7 @@
 namespace GestionBundle\Entity\segVial\eventos;
 
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\ventas\Ciudad;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

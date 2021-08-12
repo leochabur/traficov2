@@ -2,7 +2,14 @@
 
 namespace GestionBundle\Entity\segVial\eventos;
 
+use AppBundle\Entity\Estructura;
+use AppBundle\Entity\Usuario;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\rrhh\Personal;
+use GestionBundle\Entity\segVial\Unidad;
+use GestionBundle\Entity\ventas\Cliente;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

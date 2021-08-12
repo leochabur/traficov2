@@ -60,6 +60,8 @@ class UnidadType extends AbstractType
                     ->add('capacidadTanque', IntegerType::class)
                     ->add('cantidadTanques', IntegerType::class)
 
+                    ->add('tiposVencimientos')
+
                     ->add('fechaInscripcion',  DateType::class, ['widget' => 'single_text'])
                     ->add('anioModelo', IntegerType::class)               
                     ->add('radicacion', EntityType::class,  ['class' => 'GestionBundle:ventas\Provincia'])
@@ -68,8 +70,7 @@ class UnidadType extends AbstractType
                                                             'label' => 'Imagen',
                                                             'mapped' => false,
                                                             'required' => false,  
-                                                            'data_class' => null,
-                                                            'data' => 'KJHDJKDHJKHJKHDJ.pdf',                                                          
+                                                            'data_class' => null,                                                      
                                                             'constraints' => [
                                                                 new File([
 

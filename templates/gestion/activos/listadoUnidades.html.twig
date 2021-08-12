@@ -60,7 +60,10 @@
 		  <tbody>
 		  	{% for u in unidades %}
 		  		<tr>
-		  			<td><a href="{{ path('activos_actualizar_unidad', { id : u.id }) }}"><i class="fas fa-pencil-alt"></i></a></td>
+		  			<td>
+		  				<a href="{{ path('activos_actualizar_unidad', { id : u.id }) }}"><i class="fas fa-pencil-alt"></i></a>
+		  				<a href="{{ path('activos_documentacion_unidades', { id : u.id})}}"class="ml-2"><i class="far fa-file-alt"></i></a>
+		  			</td>
 		  			<td>{{ u.interno }}</td> 			
 		  			<td>{{ u.propietario|upper }}</td>
 		  			<td>{{ u.chasisMarca|upper }}</td>

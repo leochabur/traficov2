@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'sistema/base.html.twig' %}
 {% block title_module %}
 	{{ label }}
 {% endblock %}
@@ -115,7 +115,7 @@
 			</div>
 
 	    <div class='form-row ml-4 mr-2 mt-2 data-op allComponent'>	    
-<ul class="tags" data-prototype="{% include '@Gestion/ventas/formPrototype.html.twig' with { 'elem': form.ubicaciones.vars.prototype } %}">
+<ul class="tags" data-prototype="{% include 'gestion/ventas/formPrototype.html.twig' with { 'elem': form.ubicaciones.vars.prototype } %}">
 
         {% for ubicacion in form.ubicaciones %}
             <li>

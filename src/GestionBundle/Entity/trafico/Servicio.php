@@ -2,7 +2,19 @@
 
 namespace GestionBundle\Entity\trafico;
 
+use AppBundle\Entity\Estructura;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\segVial\opciones\TipoHabilitacionUnidad;
+use GestionBundle\Entity\segVial\opciones\TipoMotor;
+use GestionBundle\Entity\segVial\opciones\TipoSuspension;
+use GestionBundle\Entity\segVial\opciones\TipoUnidad;
+use GestionBundle\Entity\trafico\opciones\FrecuenciaServicio;
+use GestionBundle\Entity\trafico\opciones\SentidoServicio;
+use GestionBundle\Entity\trafico\opciones\TipoServicio;
+use GestionBundle\Entity\ventas\Ciudad;
+use GestionBundle\Entity\ventas\Cliente;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

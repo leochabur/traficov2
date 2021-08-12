@@ -1,0 +1,33 @@
+audit:
+  audit_details:
+    property: Campo
+    old_value: Valor Anterior
+    new_value: Nuevo Valor
+
+estructuraHabitual: Estructura Habitual
+estructuraActual: Estructura Actual
+ploteo: Ploteo
+audioVideo: Audio/Video
+bar: Bar
+anioModelo: Año/Modelo
+tipoUnidad: Tipo de Unidad
+carroceriaModelo: Carroceria Modelo
+carroceriaMarca: Carroceria Marca
+dominio: Dominio
+capacidadReal: Capacidad Real
+banio: Baño
+calidadUnidad: Calidad Unidad
+cantidadTanques: Cantidad Tanques
+capacidadCNRT: Capacidad CNRT
+capacidadTanque: Capacidad Combustible
+carteleraElectronica: Cartelera Electronica
+chasisModelo: Chasis Modelo
+chasisNumero: Chasis Numero
+color: Color
+consumo: Consumo
+fechaInscripcion: Fecha Inscripcion
+motorMarca: Motor Marca
+motorNumero: Motor Numero
+pcABordo: PC A Bordo
+radicacion: Radicacion
+tipoMotor: Tipo Motor

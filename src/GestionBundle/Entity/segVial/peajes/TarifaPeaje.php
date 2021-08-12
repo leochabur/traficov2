@@ -3,6 +3,7 @@
 namespace GestionBundle\Entity\segVial\peajes;
 
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\segVial\opciones\TipoUnidad;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 

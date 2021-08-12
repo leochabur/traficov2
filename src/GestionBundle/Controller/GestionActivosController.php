@@ -26,6 +26,12 @@ use GestionBundle\Entity\segVial\opciones\TipoUnidad;
 use GestionBundle\Form\segVial\opciones\TipoUnidadType;
 use GestionBundle\Entity\segVial\Unidad;
 use GestionBundle\Form\segVial\UnidadType;
+use DH\Auditor\Provider\Doctrine\Persistence\Reader\Reader;
+use DH\Auditor\Provider\Doctrine\DoctrineProvider;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use GestionBundle\Entity\opciones\DocumentoAdjunto;
+use GestionBundle\Form\opciones\DocumentoAdjuntoType;
 
 /**
  * @Route("/ventas")
@@ -34,6 +40,14 @@ use GestionBundle\Form\segVial\UnidadType;
 class GestionActivosController extends AbstractController
 {
 
+    private $provider, $validator, $params;
+
+    public function __construct(DoctrineProvider $dp, ValidatorInterface $validator, ParameterBagInterface $params)
+    {
+        $this->provider = $dp;
+        $this->validator = $validator;
+        $this->params = $params;
+    }
 
 
     /**
@@ -136,7 +150,6 @@ class GestionActivosController extends AbstractController
         $unidad = new Unidad();
         $action = $this->generateUrl('activos_procesar_alta_unidad');
         $form = $this->getFormAltaUnidad($unidad, $action);
-
         return $this->render('gestion/activos/altaUnidad.html.twig', ['form' => $form->createView(), 'label' => 'Nueva Unidad']);
     }
 
@@ -148,8 +161,21 @@ class GestionActivosController extends AbstractController
         $unidad = $this->getDoctrine()->getManager()->find(Unidad::class, $id);
         $action = $this->generateUrl('activos_procesar_alta_unidad', ['id' => $id]);
         $form = $this->getFormAltaUnidad($unidad, $action);
+        $image = $unidad->getImagen();
 
-        return $this->render('gestion/activos/altaUnidad.html.twig', ['form' => $form->createView(), 'label' => 'Actualizar Unidad']);
+
+        $reader = new Reader($this->provider);
+     /*   $query = $reader->createQuery(Unidad::class, [
+            'object_id' => $id,
+        ])->execute();*/
+
+        $pager = $reader->paginate($reader->createQuery(Unidad::class, [
+            'object_id' => $id,
+            'page' => 1,
+            'page_size' => Reader::PAGE_SIZE,
+        ]), 1, Reader::PAGE_SIZE);
+
+        return $this->render('gestion/activos/altaUnidad.html.twig', ['paginator' => $pager,'image' => $image, 'edit' => true, 'form' => $form->createView(), 'label' => 'Actualizar Unidad']);
     }
 
     private function getFormAltaUnidad($unidad, $action)
@@ -159,16 +185,24 @@ class GestionActivosController extends AbstractController
                                 ['action' => $action,'method' => 'POST']);
     }
 
+
+
     /**
      * @Route("/unidades/altaproc/{id}", name="activos_procesar_alta_unidad", methods={"POST"})
      */
     public function procesarAltaUnidadAction($id = 0, Request $request)
     {
+        $parameters = [];
+        $label = 'Nueva Unidad';
         $unidad = $action = null;
         if ($id)
         {
+            $label = 'Actualizar Unidad';
+            $parameters['edit'] = true;
+
             $unidad = $this->getDoctrine()->getManager()->find(Unidad::class, $id);
             $action = $this->generateUrl('activos_procesar_alta_unidad', ['id' => $id]);
+          //  $parameters['image'] = $unidad->getImagen();
         }
         else
         {
@@ -179,7 +213,7 @@ class GestionActivosController extends AbstractController
         $form = $this->getFormAltaUnidad($unidad, $action);
         $form->handleRequest($request);
 
-        $validator = $this->get('validator');
+        $validator = $this->validator;//get('validator');
 
         $groups = ['general'];
 
@@ -210,21 +244,22 @@ class GestionActivosController extends AbstractController
             $imageFile = $form->get('imageFile')->getData();
             if ($imageFile)
             {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+               // $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
                // $safeFilename = \Transliterator::transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
                 $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
                 try
                 {
-                    $path = $this->container->getParameter('imagesUnidades').'/'.$form->get('interno')->getData()."-".$form->get('propietario')->getData()->getId();
+                    $path = $this->params->get('imagesUnidades').'/'.$form->get('interno')->getData()."-".$form->get('propietario')->getData()->getId();
                     $imageFile->move(
                         $path,
                         $newFilename
                     );
                     $unidad->setImagen($path.'/'.$newFilename);
                 } 
-                catch (FileException $e) {
+                catch (\Exception $e) {
+                    throw new \Exception($e->getMessage);
 
                 }
             }
@@ -232,15 +267,94 @@ class GestionActivosController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             if (!$id) //quiere decir que esta dando de ata debe realizar un persist
             {
-                throw new \Exception('oakoaakko');
                 $em->persist($unidad);
             }
             $em->flush();
             return $this->redirectToRoute('activos_listado_unidades');
         }
 
+        $parameters['form'] = $form->createView();
+        $parameters['errors'] = $details;
+        $parameters['label'] = $label;
+        return $this->render('gestion/activos/altaUnidad.html.twig', $parameters);
+    }
 
-        return $this->render('gestion/activos/altaUnidad.html.twig', ['form' => $form->createView(), 'errors' => $details, 'label' => 'Nuevo Cliente']);
+    /**
+     * @Route("/unidades/documentacion/{id}", name="activos_documentacion_unidades")
+     */
+    public function documentacionUnidadesAction($id)
+    {
+        $unidad = $this->getDoctrine()->getManager()->find(Unidad::class, $id);
+        $documento = new DocumentoAdjunto();
+        $documentoType = $this->createForm(DocumentoAdjuntoType::class, 
+                                           $documento, 
+                                           ['method' => 'POST', 'action' => $this->generateUrl('activos_documentacion_unidades_procesar', ['id' => $id])]);
+        return $this->render('gestion/activos/documentosUnidades.html.twig', ['unidad' => $unidad, 'docForm' => $documentoType->createView()]);
+    }
+
+    /**
+     * @Route("/unidades/docproc/{id}", name="activos_documentacion_unidades_procesar", methods={"POST"})
+     */
+    public function documentacionUnidadesProcesarAction($id, Request $request)
+    {
+        $unidad = $this->getDoctrine()->getManager()->find(Unidad::class, $id);
+        $documento = new DocumentoAdjunto();
+        $documentoType = $this->createForm(DocumentoAdjuntoType::class, 
+                                           $documento, 
+                                           ['method' => 'POST', 'action' => $this->generateUrl('activos_documentacion_unidades_procesar', ['id' => $id])]);
+        $documentoType->handleRequest($request);
+        $documento->setUnidad($unidad);
+        $documento->setImagen($documentoType->get('imageFile')->getData());
+
+
+        $errors = $this->validator->validate($documento);
+
+        $details = [];
+
+        if (count($errors))
+        {
+            
+            foreach ($errors as $e)
+            {
+                $const = $e->getConstraint();
+                $groups = $const->groups;
+
+                    $details[$groups[0]][] = $const->message;
+                          
+            }
+        }
+        else
+        {
+
+            $imageFile = $documentoType->get('imageFile')->getData();
+            if ($imageFile)
+            {
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+
+                try
+                {
+                    $path = $this->params->get('imagesUnidades').'/'.$unidad->getInterno()."-".$unidad->getPropietario()->getId()."/documentos";
+                    $imageFile->move(
+                        $path,
+                        $newFilename
+                    );
+                    $documento->setImagen($path.'/'.$newFilename);
+                } 
+                catch (\Exception $e) {
+                    throw new \Exception($e->getMessage);
+
+                }
+            }
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($documento);
+            $em->flush();
+            return $this->redirectToRoute('activos_documentacion_unidades', ['id' => $id]);
+
+        }
+
+        return $this->render('gestion/activos/documentosUnidades.html.twig', ['unidad' => $unidad, 'docForm' => $documentoType->createView()]);
     }
 
 }

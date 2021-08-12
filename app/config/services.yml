@@ -30,6 +30,10 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    GestionBundle\Controller\:
+        resource: '../../src/GestionBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
 
     GestionBundle\Form\ventas\UbicacionEstructuraClienteType:
             arguments: ['@session']

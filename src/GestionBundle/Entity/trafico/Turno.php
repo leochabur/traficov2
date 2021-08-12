@@ -2,7 +2,12 @@
 
 namespace GestionBundle\Entity\trafico;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use GestionBundle\Entity\segVial\opciones\TipoUnidad;
+use GestionBundle\Entity\trafico\opciones\FrecuenciaTurno;
+use GestionBundle\Entity\trafico\opciones\TurnoCliente;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Turno

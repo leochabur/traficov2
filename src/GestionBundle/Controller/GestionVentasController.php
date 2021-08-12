@@ -137,7 +137,7 @@ class GestionVentasController extends Controller
         $action = $this->generateUrl('alta_cliente_procesar');
         $form = $this->getFormAltaCliente($cliente, $action);
 
-        return $this->render('@Gestion/ventas/altaClienteV2.html.twig', ['form' => $form->createView(), 'label' => 'Nuevo Cliente']);
+        return $this->render('gestion/ventas/altaClienteV2.html.twig', ['form' => $form->createView(), 'label' => 'Nuevo Cliente']);
     }
 
     private function getFormAltaCliente($cliente, $action)
@@ -202,7 +202,7 @@ class GestionVentasController extends Controller
     public function listadoClientesAction()
     {
         $clientes = $this->getDoctrine()->getRepository(Cliente::class)->getAllClientes();
-        return $this->render('@Gestion/ventas/listadoClientesV2.html.twig', ['clientes' => $clientes]);
+        return $this->render('gestion/ventas/listadoClientesV2.html.twig', ['clientes' => $clientes]);
     }
 
     /**
@@ -213,7 +213,7 @@ class GestionVentasController extends Controller
         $cliente = $this->getDoctrine()->getRepository(Cliente::class)->find($id);
         $action = $this->generateUrl('editar_cliente_procesar', ['id' => $id]);
         $form = $this->getFormAltaCliente($cliente, $action);
-        return $this->render('@Gestion/ventas/altaClienteV2.html.twig', ['form' => $form->createView(), 'label' => 'Modificar Cliente']);
+        return $this->render('gestion/ventas/altaClienteV2.html.twig', ['form' => $form->createView(), 'label' => 'Modificar Cliente']);
     }
 
     /**

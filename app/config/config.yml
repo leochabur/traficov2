@@ -7,7 +7,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: es
 
 framework:
     #esi: ~
@@ -31,7 +31,9 @@ framework:
     assets: ~
     php_errors:
         log: true
-    translator: { fallbacks: [en] }
+    translator:
+        fallbacks: ['%locale%'] 
+        default_path: '%kernel.project_dir%/translations'
 
 # Twig Configuration
 twig:
@@ -76,7 +78,16 @@ sensio_framework_extra:
    router:
         annotations: false
 
-dh_doctrine_audit:
+dh_auditor:
+    timezone: 'America/Argentina/Buenos_Aires'
     enabled: true                           # auditing is globally enabled
-    entities:
-        GestionBundle\Entity\segVial\Unidad: ~
+    providers:
+        doctrine:
+            entities:
+                GestionBundle\Entity\segVial\Unidad: ~
+
+            storage_services:
+                - '@doctrine.orm.default_entity_manager'
+
+            auditing_services:
+                - '@doctrine.orm.default_entity_manager'

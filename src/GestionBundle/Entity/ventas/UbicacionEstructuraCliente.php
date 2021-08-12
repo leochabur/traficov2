@@ -2,6 +2,7 @@
 
 namespace GestionBundle\Entity\ventas;
 
+use AppBundle\Entity\Estructura;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

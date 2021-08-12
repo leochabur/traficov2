@@ -6,6 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use GestionBundle\Entity\Form\GestionBundle\Entity\opciones\TipoVencimientoType;
+
+use GestionBundle\Entity\opciones\Tipo
+
 
 class TipoHabilitacionUnidadType extends AbstractType
 {
@@ -14,8 +18,12 @@ class TipoHabilitacionUnidadType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('tipo')->add('guardar', SubmitType::class);
-    }/**
+        $builder->add('tipo', TipoVencimientoType::class, ['data_class']
+                ->add('guardar', SubmitType::class);
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)

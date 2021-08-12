@@ -36,6 +36,10 @@ monolog:
         #chromephp:
         #    type: chromephp
         #    level: info
-
+maker:
+    # tell MakerBundle that all of your classes lives in an
+    # Acme namespace, instead of the default App
+    # (e.g. Acme\Entity\Article, Acme\Command\MyCommand, etc)
+    root_namespace: 'GestionBundle\Entity'
 #swiftmailer:
 #    delivery_addresses: ['me@example.com']
