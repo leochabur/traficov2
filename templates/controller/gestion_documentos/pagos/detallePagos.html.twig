@@ -1,0 +1,141 @@
+<table class="table table-hover table-bordered table-striped table-sm">
+	<thead >
+		<tr>
+			<th>Nº Cuota</th>
+			<th>Unidades Afectadas</th>
+			<th>Fecha Pago</th>
+			<th>Importe</th>
+		</tr>
+	</thead>
+	<tbody >
+			{% for c in vto.cuotasVencimientos %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ c.cuotasUnidades|length }}</td>
+					<td>{{ c.fechaPago|date('d/m/Y') }}</td>
+					<td>{{ c.monto }}</td>
+					<td><a data-id="{{ c.id }}" data-cta="{{ loop.index }}" class="btn btn-sm btn-danger delete">-</a></td>
+				</tr>
+			{% endfor %}
+	</tbody>
+</table>
+{% if vto.cantCuotas > vto.cuotasVencimientos|length %}
+	<a href="" class="btn btn-success btn-sm mb-4" data-toggle="modal" data-target="#modalLoginForm">+</a>
+
+	{{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
+		<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document" id="modalData">
+		    <div class="modal-content">
+		      <div class="modal-header text-center">
+		        <h4 class="modal-title w-100 font-weight-bold">Agregar Cuota</h4>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="form-row">
+		        <div class="col-lg-8 ml-4 mr-4 mt-3">
+		          {{ form_label(form.fechaVencimiento) }}
+		          {{ form_widget(form.fechaVencimiento, { attr : { class : 'form-control'}}) }}
+		        </div>
+		      </div>
+		      <div class="form-row">
+		        <div class="col-lg-8 ml-4 mr-4 mt-3">
+		          {{ form_label(form.fechaPago) }}
+		          {{ form_widget(form.fechaPago, { attr : { class : 'form-control'}}) }}
+		        </div>
+		      </div>
+		      <div class="form-row">
+		        <div class="col-lg-8 ml-4 mr-4 mt-3">
+		          {{ form_label(form.monto) }}
+		          {{ form_widget(form.monto, { attr : { class : 'form-control'}}) }}
+		        </div>
+		      </div>
+		      <div class="form-row">
+		        <div class="col-lg-8 ml-4 mr-4 mt-3">
+		          {{ form_label(form.vencimiento) }}
+		          {{ form_widget(form.vencimiento, { attr : { class : 'form-control'}}) }}
+		        </div>
+		      </div>
+		      <div class="form-row">
+		        <div class="col-lg-10 ml-2 mr-4 mt-2">
+		          <ul class="fa-ul text-danger" id="error-msg">
+		          </ul>
+		        </div>
+		      </div>
+		      <div class="modal-footer d-flex justify-content-center">
+		        <button class="btn btn-default send-pay">Registrar Cuota</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	{{ form_end(form) }}
+
+{% endif %}
+
+<script type="text/javascript">
+	
+	path = "{{ path('controller_gestion_documentos_pagos_delete_cuuota', { id : 'ID_VTO'}) }}";
+	$('.delete').click(function(event){
+										event.preventDefault();
+										let a = $(this);
+		
+										bootbox.confirm({
+														message: "Seguro eliminar la cuota " + a.data('cta') + "?",
+													    buttons: {
+													        confirm: {
+													            label: 'Si',
+													            className: 'btn-success btn-sm'
+													        },
+													        cancel: {
+													            label: 'No',
+													            className: 'btn-danger btn-sm'
+													        }
+													    },																													
+														callback: function(result){ 
+																					    if (result)
+																					    {
+																					    	const pathDelete = path.replace('ID_VTO', a.data('id'));
+																					    	$.post(pathDelete,
+																					    		   function(data){
+																					    		   					if (data.ok)
+																					    		   					{
+																					    		   						reload();
+																					    		   					}
+																					    		   					else
+																					    		   					{
+																					    		   						alert(data.msg);
+																					    		   					}
+																					    		   });
+																					    } 
+																					}
+														});
+
+	});
+
+	$('.send-pay').click(function(event) {
+										  event.preventDefault();
+										  var form = $(this).closest('form');
+										  $.post(form.attr('action'),
+										  		 form.serialize(),
+										  		 function(data) {
+										  		 				console.log(data);
+										  		 				$('#error-msg').empty();
+										  		 				if (!data.ok)
+										  		 				{
+										  		 					data.errors.general.map((e) => {
+										  		 											 $('#error-msg').append('<li><span class="fa-li"><i class="fas fa-times-circle"></i></span>'+e+'</li>');
+										  		 					});
+										  		 				}
+										  		 				else
+										  		 				{
+										  		 					$('#modalLoginForm').modal('hide');
+										  		 				}
+										  		 });
+
+	});
+
+	$("#modalLoginForm").on('hide.bs.modal', function(){
+													  reload();
+													});
+
+</script>

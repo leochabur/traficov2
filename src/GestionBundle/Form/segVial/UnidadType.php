@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
+use GestionBundle\Entity\segVial\documentacion\Seguro;
 
 class UnidadType extends AbstractType
 {
@@ -42,6 +43,14 @@ class UnidadType extends AbstractType
                     ->add('chasisModelo', TextType::class)                    
                     ->add('chasisMarca')
                     ->add('chasisNumero', TextType::class)
+                    ->add('numeroTacografo')
+                    ->add('marcaTacografo')
+                    ->add('vencimientos', 
+                          EntityType::class,
+                          [
+                            'class' => Seguro::class,
+                            'multiple' => true
+                          ])
 
                     ->add('carroceriaMarca', TextType::class)
                     ->add('carroceriaModelo', TextType::class)
@@ -49,6 +58,8 @@ class UnidadType extends AbstractType
                     ->add('capacidadCNRT', IntegerType::class)
 
                     ->add('tipoMotor', EntityType::class, ['class' => 'GestionBundle:segVial\opciones\TipoMotor'])
+                    ->add('ubicacionMotor', EntityType::class, ['class' => 'GestionBundle:segVial\opciones\UbicacionMotor'])
+                    ->add('habilitacion', EntityType::class, ['class' => 'GestionBundle:segVial\opciones\HabilitacionUnidad'])
                     ->add('motorMarca', TextType::class)
                     ->add('motorNumero', TextType::class)
                     ->add('consumo')
@@ -84,19 +95,10 @@ class UnidadType extends AbstractType
                                                             ],
                                                         ]
                     )
-
-
-
-                    
-
-
-
-
-                    
-
                     ->add('color')
                     ->add('ploteo')
                     ->add('carteleraElectronica')
+                    ->add('activo')
                     ->add('pcABordo');
      //   }
 

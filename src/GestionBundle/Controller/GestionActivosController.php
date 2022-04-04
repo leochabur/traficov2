@@ -158,6 +158,11 @@ class GestionActivosController extends AbstractController
      */
     public function getActualizarUnidad($id)
     {
+        if ((!$id) || (!is_numeric($id)))
+        {
+            return $this->redirectToRoute('activos_listado_unidades');
+        }
+
         $unidad = $this->getDoctrine()->getManager()->find(Unidad::class, $id);
         $action = $this->generateUrl('activos_procesar_alta_unidad', ['id' => $id]);
         $form = $this->getFormAltaUnidad($unidad, $action);
@@ -175,7 +180,7 @@ class GestionActivosController extends AbstractController
             'page_size' => Reader::PAGE_SIZE,
         ]), 1, Reader::PAGE_SIZE);
 
-        return $this->render('gestion/activos/altaUnidad.html.twig', ['paginator' => $pager,'image' => $image, 'edit' => true, 'form' => $form->createView(), 'label' => 'Actualizar Unidad']);
+        return $this->render('gestion/activos/altaUnidad.html.twig', ['paginator' => $pager, 'image' => $image, 'edit' => true, 'form' => $form->createView(), 'label' => 'Actualizar Unidad']);
     }
 
     private function getFormAltaUnidad($unidad, $action)
@@ -265,11 +270,17 @@ class GestionActivosController extends AbstractController
             }
 
             $em = $this->getDoctrine()->getManager();
-            if (!$id) //quiere decir que esta dando de ata debe realizar un persist
+            if (!$id) //quiere decir que esta dando de alta debe realizar un persist
             {
                 $em->persist($unidad);
             }
             $em->flush();
+
+            if (!$id)
+            {
+                //return $this->redirect($this->generateUrl('activos_documentacion_unidades', ['id' => $unidad->getId()]));
+            }
+            
             return $this->redirectToRoute('activos_listado_unidades');
         }
 
@@ -355,6 +366,26 @@ class GestionActivosController extends AbstractController
         }
 
         return $this->render('gestion/activos/documentosUnidades.html.twig', ['unidad' => $unidad, 'docForm' => $documentoType->createView()]);
+    }
+
+    /**
+     * @Route("/unidades/deletedoc/{id}", name="activos_delete_documento")
+     */
+    public function deleteDocumentoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $documento = $em->find(DocumentoAdjunto::class, $id);
+        try
+        {
+            $path = $documento->getImagen();
+            $em->remove($documento);
+            $em->flush();
+            unlink($path);
+            return new JsonResponse(['ok' => true]);
+        }
+        catch (\Exception $e){
+                                return new JsonResponse(['ok' => false, 'message' => $e->getMessage()]);
+        }
     }
 
 }

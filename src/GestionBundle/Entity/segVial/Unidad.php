@@ -10,11 +10,14 @@ use GestionBundle\Entity\opciones\DocumentoAdjunto;
 use GestionBundle\Entity\opciones\TipoVencimiento;
 use GestionBundle\Entity\opciones\TipoVencimientoUnidad;
 use GestionBundle\Entity\rrhh\Propietario;
+use GestionBundle\Entity\segVial\documentacion\VencimientoUnidad;
 use GestionBundle\Entity\segVial\opciones\CalidadUnidad;
+use GestionBundle\Entity\segVial\opciones\HabilitacionUnidad;
 use GestionBundle\Entity\segVial\opciones\MarcaChasis;
 use GestionBundle\Entity\segVial\opciones\TipoHabilitacionUnidad;
 use GestionBundle\Entity\segVial\opciones\TipoMotor;
 use GestionBundle\Entity\segVial\opciones\TipoUnidad;
+use GestionBundle\Entity\segVial\opciones\UbicacionMotor;
 use GestionBundle\Entity\ventas\Provincia;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -179,11 +182,37 @@ class Unidad
     private $anioModelo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="GestionBundle\Entity\segVial\opciones\UbicacionMotor")
+     * @ORM\JoinColumn(name="id_ubicacion_motor", referencedColumnName="id", nullable=true)
+     */
+    private $ubicacionMotor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="GestionBundle\Entity\segVial\opciones\HabilitacionUnidad")
+     * @ORM\JoinColumn(name="id_habilitacion", referencedColumnName="id", nullable=true)
+     */
+    private $habilitacion;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
     private $color;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroTac", type="string", length=255, nullable=true)
+     */
+    private $numeroTacografo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="marcaTac", type="string", length=255, nullable=true)
+     */
+    private $marcaTacografo;
 
     /**
      * @var bool
@@ -301,7 +330,7 @@ class Unidad
     private $confirmado = false;
 
     /**
-     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\opciones\TipoVencimientoUnidad")
+     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\segVial\documentacion\TipoVencimiento")
      * @ORM\JoinTable(name="seg_vial_unidades_tipos_vencimientos",
      *      joinColumns={@ORM\JoinColumn(name="id_unidad", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_tipo_vto", referencedColumnName="id")}
@@ -313,6 +342,12 @@ class Unidad
      * @ORM\OneToMany(targetEntity="GestionBundle\Entity\opciones\DocumentoAdjunto", mappedBy="unidad") 
      */
     private $documentos;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\segVial\documentacion\VencimientoUnidad", mappedBy="unidades")
+     */
+    private $vencimientos;
+    
 
     public function __toString()
     {
@@ -958,8 +993,9 @@ class Unidad
     public function __construct()
     {
         $this->habilitaciones = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tiposVencimientos = new ArrayCollection();
         $this->documentos = new ArrayCollection();
+        $this->vencimientos = new ArrayCollection();
+        $this->tiposVencimientos = new ArrayCollection();
 
     }
 
@@ -1186,30 +1222,6 @@ class Unidad
     }
 
     /**
-     * @return Collection|TipoVencimiento[]
-     */
-    public function getTiposVencimientos(): Collection
-    {
-        return $this->tiposVencimientos;
-    }
-
-    public function addTiposVencimiento(TipoVencimiento $tiposVencimiento): self
-    {
-        if (!$this->tiposVencimientos->contains($tiposVencimiento)) {
-            $this->tiposVencimientos[] = $tiposVencimiento;
-        }
-
-        return $this;
-    }
-
-    public function removeTiposVencimiento(TipoVencimiento $tiposVencimiento): self
-    {
-        $this->tiposVencimientos->removeElement($tiposVencimiento);
-
-        return $this;
-    }
-
-    /**
      * @return Collection|DocumentoAdjunto[]
      */
     public function getDocumentos(): Collection
@@ -1229,6 +1241,105 @@ class Unidad
     public function removeDocumento(DocumentoAdjunto $documento): self
     {
         $this->documentos->removeElement($documento);
+
+        return $this;
+    }
+
+    public function getUbicacionMotor(): ?UbicacionMotor
+    {
+        return $this->ubicacionMotor;
+    }
+
+    public function setUbicacionMotor(?UbicacionMotor $ubicacionMotor): self
+    {
+        $this->ubicacionMotor = $ubicacionMotor;
+
+        return $this;
+    }
+
+    public function getHabilitacion(): ?HabilitacionUnidad
+    {
+        return $this->habilitacion;
+    }
+
+    public function setHabilitacion(?HabilitacionUnidad $habilitacion): self
+    {
+        $this->habilitacion = $habilitacion;
+
+        return $this;
+    }
+
+    public function getNumeroTacografo(): ?string
+    {
+        return $this->numeroTacografo;
+    }
+
+    public function setNumeroTacografo(?string $numeroTacografo): self
+    {
+        $this->numeroTacografo = $numeroTacografo;
+
+        return $this;
+    }
+
+    public function getMarcaTacografo(): ?string
+    {
+        return $this->marcaTacografo;
+    }
+
+    public function setMarcaTacografo(?string $marcaTacografo): self
+    {
+        $this->marcaTacografo = $marcaTacografo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|VencimientoUnidad[]
+     */
+    public function getVencimientos(): Collection
+    {
+        return $this->vencimientos;
+    }
+
+    public function addVencimiento(VencimientoUnidad $vencimiento): self
+    {
+        if (!$this->vencimientos->contains($vencimiento)) {
+            $this->vencimientos[] = $vencimiento;
+            $vencimiento->addUnidade($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVencimiento(VencimientoUnidad $vencimiento): self
+    {
+        if ($this->vencimientos->removeElement($vencimiento)) {
+            $vencimiento->removeUnidade($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|\GestionBundle\Entity\segVial\documentacion\TipoVencimiento[]
+     */
+    public function getTiposVencimientos(): Collection
+    {
+        return $this->tiposVencimientos;
+    }
+
+    public function addTiposVencimiento(\GestionBundle\Entity\segVial\documentacion\TipoVencimiento $tiposVencimiento): self
+    {
+        if (!$this->tiposVencimientos->contains($tiposVencimiento)) {
+            $this->tiposVencimientos[] = $tiposVencimiento;
+        }
+
+        return $this;
+    }
+
+    public function removeTiposVencimiento(\GestionBundle\Entity\segVial\documentacion\TipoVencimiento $tiposVencimiento): self
+    {
+        $this->tiposVencimientos->removeElement($tiposVencimiento);
 
         return $this;
     }

@@ -42,10 +42,28 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-2 card">
-			<ul class="fa-ul pt-5 partial fontReduce">
+				{% if image is not defined or not image %}			
+					<img id="imgPreview" src="{{ asset('resources/img/select_image_2.png') }}" alt="thumbnail" class="img-thumbnail mr-2" style="max-width:200px;width: 200px;height: auto;">
+				{% else %}
+					{% if image %}
+						<img id="imgPreview" src="{{ asset(image) }}" alt="thumbnail" class="img-thumbnail mr-2" style="max-width:200px; width: 200px;height: auto;">
+					{% endif %}
+				{% endif %}
+
+				  <div class="custom-file">
+				  	<label class="custom-file-label" for="inputGroupFile01">Imagen</label>
+				    {{ form_widget(form.imageFile, {'attr' : {'class' : 'photo custom-file-input', 'id' : 'inputGroupFile01', 'aria-describedby' : 'inputGroupFileAddon01' }}) }} 
+				  </div>
+
+				<div class="custom-control custom-switch text-center">
+				  {{ form_widget(form.activo, { 'attr' : {'class' : 'custom-control-input'}}) }}
+				  <label class="custom-control-label" for="gestionbundle_segvial_unidad_activo" title="Desactivado"></label>
+				</div>
+			<hr>
+			<ul class="fa-ul partial fontReduce">
 			  <li class="mt-3 {{ errors.general is defined ? 'text-danger' : ''}}">
 			  		<a data-title="Datos Generales" data-class="data-gen" class="firstA">
-			  						<span class="fa-li"><i class="far fa-calendar-check fa-lg"></i></span>Datos Generales
+			  						<span class="fa-li"><i class="far fa-calendar-check fa-lg"></i></span>General
 			  		</a>
 			  </li>
 			  {% if form.details is defined %}
@@ -54,12 +72,6 @@
 					  <li class="mt-3 {{ errors.inscription is defined ? 'text-danger' : ''}}">
 					  	<a data-title="Datos de Inscripcion" data-class="data-insc"><span class="fa-li"><i class="fas fa-balance-scale fa-lg"></i></span>Datos Inscripcion</a></li>
 					  <li class="mt-3"><a data-title="Otros Datos" data-class="data-otros"><span class="fa-li"><i class="fas fa-book"></i></span>Otros Datos</a></li>
-			  
-					  <li class="mt-3">
-					  		<a data-title="Imagen" data-class="data-img">
-					  						<span class="fa-li"><i class="far fa-image fa-lg"></i></span>Imagen
-					  		</a>
-					  </li>
 					  <li class="mt-3">
 					  		<a data-title="Logs" data-class="data-logs">
 					  						<span class="fa-li"><i class="far fa-image fa-lg"></i></span>Logs
@@ -112,10 +124,10 @@
 			</div>
 			<div class='form-row ml-4 mr-2 mt-2 data-img allComponent'>	 
 		    	<div class=' col-lg-4 col-sm-12 mb-2'>
-		    			{{ form_widget(form.imageFile, {'attr' : {'class' : 'photo'}}) }}
+		    			///aca va el form de imagen
 
 			            <div class="holder mt-2">
-			                <img id="imgPreview" src="{% if image is defined %}{{ asset(image) }}{% endif %}" alt="pic" class="img"/>
+			                <!--img id="imgPreview" src="{% if image is defined %}{{ asset(image) }}{% endif %}" alt="pic" class="img"/-->
 			            </div>	    
 
 				</div>
@@ -169,9 +181,13 @@
 					</div>
 				</div>
 			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
-			    	<div class=' col-lg-3 col-sm-12'>
+			    	<div class=' col-lg-2 col-sm-12'>
 					    {{ form_label(form.tipoMotor) }}
 					    {{ form_widget(form.tipoMotor, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.ubicacionMotor) }}
+					    {{ form_widget(form.ubicacionMotor, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
 					</div>
 			    	<div class=' col-lg-3 col-sm-12'>
 					    {{ form_label(form.motorMarca) }}
@@ -184,6 +200,20 @@
 			    	<div class=' col-lg-2 col-sm-12'>
 					    {{ form_label(form.consumo) }}
 					    {{ form_widget(form.consumo, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					</div>
+				</div>
+			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.habilitacion) }}
+					    {{ form_widget(form.habilitacion, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.marcaTacografo, 'Marca Tacografo') }}
+					    {{ form_widget(form.marcaTacografo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
+					</div>
+			    	<div class=' col-lg-3 col-sm-12'>
+					    {{ form_label(form.numeroTacografo, 'Numero Tacografo') }}
+					    {{ form_widget(form.numeroTacografo, { 'attr' : {'class' : 'form-control form-control-sm'}}) }}
 					</div>
 				</div>
 			    <div class='form-row ml-4 mr-2 mt-2 data-cont allComponent'>
@@ -229,6 +259,11 @@
 					    {{ form_label(form.tiposVencimientos) }}
 					    <br>
 					    {{ form_widget(form.tiposVencimientos, { 'attr' : {'class' : 'form-control form-control-sm multiple-select'}}) }}
+					</div>
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.vencimientos) }}
+					    <br>
+					    {{ form_widget(form.vencimientos, { 'attr' : {'class' : 'form-control form-control-sm multiple-select'}}) }}
 					</div>
 				</div>
 			    <div class='form-row ml-4 mr-2 mt-2 data-otros allComponent'>
@@ -349,7 +384,7 @@ $(document).ready(function(){
 									  });
     		
 $('.multiple-select').multiselect({
-            buttonWidth: '400px'
+            buttonWidth: '300px'
         });
 
 		    
