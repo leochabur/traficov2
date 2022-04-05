@@ -493,9 +493,10 @@ class GestionDocumentosController extends AbstractController
                 {
                     $seguro->addUnidade($u);
                 }
-            }
-            $original->setActivo(false);
+                $original->setActivo(false);
 
+            }
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($seguro);
             $em->flush();
@@ -722,9 +723,10 @@ class GestionDocumentosController extends AbstractController
                 {
                     $habilitacion->addUnidade($u);
                 }
+                $original->setActivo(false);
             }
+
             
-            $original->setActivo(false);
             $action = 'generada';
             $em->persist($habilitacion);
         }
