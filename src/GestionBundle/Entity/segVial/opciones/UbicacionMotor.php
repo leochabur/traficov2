@@ -2,12 +2,11 @@
 
 namespace GestionBundle\Entity\segVial\opciones;
 
-use GestionBundle\Entity\Repository\segVial\opciones\UbicacionMotorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="seg_vial_opciones_ubicacion_motor_unidad")
- * @ORM\Entity(repositoryClass="GestionBundle\Entity\Repository\segVial\opciones\UbicacionMotorRepository")
+ * @ORM\Entity
  */
 class UbicacionMotor
 {
