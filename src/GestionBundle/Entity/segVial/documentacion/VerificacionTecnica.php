@@ -44,7 +44,6 @@ abstract class VerificacionTecnica extends VencimientoUnidad
     }
 
     public abstract function getTipoVtv();
-    public abstract function getType();
 
     public function getInterno()
     {

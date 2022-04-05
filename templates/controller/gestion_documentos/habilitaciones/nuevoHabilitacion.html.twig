@@ -36,7 +36,7 @@
 	{{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'fontReduce'}}) }}
 	<div class="row card">
 		<div class="col-lg-12 text-right">
-			{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn btn-sm btn-success'}}) }}
+			{{ form_widget(form.vto.guardar, { 'attr' : {'class' : 'btn btn-sm btn-success'}}) }}
 			<a class="btn btn-sm btn-danger btn-cancel">Cancelar</a>
 		</div>
 	</div>
@@ -68,77 +68,96 @@
 
 		</div>
 		<div class="col-lg-10 card">
-		<div class="card-header card-title">
-		    Datos Generales
-		</div> 
+			<div class="card-header card-title">
+			    Datos Generales
+			</div> 
 		    <div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.poliza) }}
-				    {{ form_widget(form.poliza, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+				    {{ form_label(form.codigoHabilitacion) }}
+				    {{ form_widget(form.codigoHabilitacion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
 				</div>
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.emision) }}
-				    {{ form_widget(form.emision, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
-				    {{ form_errors(form.emision) }}
+				    {{ form_label(form.vto.emision) }}
+				    {{ form_widget(form.vto.emision, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
 				    
 				</div>   
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.proveedor, 'Compañia Seguro') }}
+				    {{ form_label(form.proveedor, 'Organismo Emisor') }}
 				    {{ form_widget(form.proveedor, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
 				    
 				</div>  
 			</div>
 			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.vigenciaDesde) }}
-				    {{ form_widget(form.vigenciaDesde, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+				    {{ form_label(form.vto.vigenciaDesde) }}
+				    {{ form_widget(form.vto.vigenciaDesde, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
 				    
 				</div>
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.vigenciaHasta) }}
-				    {{ form_widget(form.vigenciaHasta, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+				    {{ form_label(form.vto.vigenciaHasta) }}
+				    {{ form_widget(form.vto.vigenciaHasta, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
 				    
 				</div>
-		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.cantCuotas) }}
-				    {{ form_widget(form.cantCuotas, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
-				    
-				</div>
+				{% if form.cantCuotas is defined %}
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.cantCuotas) }}
+					    {{ form_widget(form.cantCuotas, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					    
+					</div>
+				{% endif %}
+				{% if form.importe is defined %}
+			    	<div class=' col-lg-2 col-sm-12'>
+					    {{ form_label(form.importe) }}
+					    {{ form_widget(form.importe, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}
+					    
+					</div>
+				{% endif %}
 			</div>
 			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
-		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.asegurado) }}
-				    {{ form_widget(form.asegurado, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
-				</div>
-		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.tomador) }}
-				    {{ form_widget(form.tomador, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
-				</div>
-				{% if form.renuevaVencimiento is defined%}
+				{% if form.origen is defined %}
 			    	<div class=' col-lg-4 col-sm-12'>
-					    {{ form_label(form.renuevaVencimiento, 'Renueva Poliza...') }}
+					    {{ form_label(form.origen) }}
+					    {{ form_widget(form.origen, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase multiple-select'}}) }}				    
+					</div>
+				{% endif %}
+				{% if form.destino is defined %}
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.destino) }}
+					    {{ form_widget(form.destino, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase multiple-select'}}) }}				    
+					</div>
+				{% endif %}
+				{% if form.renuevaVencimiento is defined %}
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.renuevaVencimiento) }}
 					    {{ form_widget(form.renuevaVencimiento, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
 					</div>
 				{% endif %}
 			</div>
 			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
 		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.unidades) }}
-				    {{ form_widget(form.unidades, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase multiple-select'}}) }}				    
+				    {{ form_label(form.vto.unidades) }}
+				    {{ form_widget(form.vto.unidades, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase multiple-select'}}) }}				    
 				</div>
-		    	<div class=' col-lg-4'>
-				    {{ form_label(form.tipoDestinoSeguro, 'Tipo de Destino') }}
-				    {{ form_widget(form.tipoDestinoSeguro, { 'attr' : {'class' : 'form-control text-uppercase'}}) }}				    
-				</div>
-		    	<div class=' col-lg-4 col-sm-12'>
-				    {{ form_label(form.cobertura, 'Cobertura') }}
-				    {{ form_widget(form.cobertura, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
-				</div>
+				{% if form.cliente is defined %}
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.cliente) }}
+					    {{ form_widget(form.cliente, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+					</div>
+				{% endif %}
+			</div>
+			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
+				{% if form.tipoHabilitacion is defined %}
+			    	<div class=' col-lg-4 col-sm-12'>
+					    {{ form_label(form.tipoHabilitacion) }}
+					    {{ form_widget(form.tipoHabilitacion, { 'attr' : {'class' : 'form-control form-control-sm text-uppercase'}}) }}				    
+					</div>
+				{% endif %}
 			</div>
 			<div class='ml-4 mr-2 mt-2 data-pagos allComponent pay-detail'>	 
 		    	
 
 			</div>
+
 			<div class='form-row ml-4 mr-2 mt-2 data-gen allComponent'>	 
 					{% if errors.general is defined %}
 						<ul class="fa-ul text-danger">
@@ -147,9 +166,10 @@
 							{% endfor %}
 						</ul>
 					{% endif %}
+
 			</div>
 
-    {{ form_end(form) }}
+    	{{ form_end(form) }}
 			
 		</div>
 	</div>
@@ -159,16 +179,19 @@
 
 <script type="text/javascript">
 
-var path;
-function reload()
-{		{% if edicion is defined %}
-			 $('.pay-detail').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
-			 $('.pay-detail').load("{{ path('controller_gestion_documentos_detalle_pagos', { id : vtv.id}) }}");
-		 {% endif %}
-}
+
+	var path;
+	function reload()
+	{		{% if edicion is defined %}
+				 $('.pay-detail').html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+				 $('.pay-detail').load("{{ path('controller_gestion_documentos_detalle_pagos', { id : vtv.id}) }}");
+			 {% endif %}
+	}
 
 $(document).ready(function(){
+
 				reload();
+
                 $(".photo").change(function () {
                     const file = this.files[0];
                     if (file) {
@@ -181,9 +204,11 @@ $(document).ready(function(){
                     }
                 });
 
+               
+
 				$('.btn-cancel').click(function(){
 												bootbox.confirm({
-																message: "Seguro cancelar la carga del seguro?",
+																message: "Seguro cancelar la carga de la habilitacion?",
 															    buttons: {
 															        confirm: {
 															            label: 'Si',
@@ -197,7 +222,7 @@ $(document).ready(function(){
 																callback: function(result){ 
 																								    if (result)
 																								    {
-																								    		window.location.href = "{{ path('controller_gestion_documentos_home_seguro') }}";
+																								    		window.location.href = "{{ path('controller_gestion_documentos_home_habilitaciones') }}";
 																								    } 
 																								}
 																});

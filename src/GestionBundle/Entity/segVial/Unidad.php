@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *     message="Interno existente para el propietario!",
  *     groups={"general", "tecnical", "inscription"}
  * )
+ * @ORM\HasLifecycleCallbacks()
  */
 class Unidad
 {
@@ -344,10 +345,35 @@ class Unidad
     private $documentos;
 
     /**
-     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\segVial\documentacion\VencimientoUnidad", mappedBy="unidades")
+     * @ORM\ManyToMany(targetEntity="GestionBundle\Entity\segVial\documentacion\VencimientoUnidad", mappedBy="unidades", cascade={"ALL"})
      */
     private $vencimientos;
     
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function updateVencimientos(): void
+    {
+        $this->updateAssocciation();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateVencimientosUpdate(): void
+    {
+        $this->updateAssocciation();
+    }
+
+    private function updateAssocciation()
+    {
+        foreach ($this->vencimientos as $v)
+        {
+            $v->addUnidade($this);
+            throw new \Exception('sdfsfsdfdsf');
+        }
+    }
 
     public function __toString()
     {

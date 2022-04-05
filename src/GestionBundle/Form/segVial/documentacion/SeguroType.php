@@ -12,6 +12,8 @@ use GestionBundle\Entity\segVial\documentacion\CompaniaSeguro;
 use GestionBundle\Entity\segVial\Unidad;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class SeguroType extends AbstractType
 {
@@ -34,7 +36,25 @@ class SeguroType extends AbstractType
             ->add('asegurado')
             ->add('cantCuotas')
             ->add('tomador')
-            ->add('renuevaVencimiento')
+            ->addEventListener(FormEvents::PRE_SET_DATA, 
+                  function (FormEvent $event) {
+                                                $seguro = $event->getData();
+                                                $form = $event->getForm();
+
+                                                if (!$seguro->getId()) 
+                                                {
+                                                        $form->add('renuevaVencimiento', 
+                                                                      EntityType::class,
+                                                                      [
+                                                                        'class' => Seguro::class,
+                                                                        'required' => false,
+                                                                      ]);
+                                                }
+                                                else
+                                                {
+                                                    return;
+                                                }
+                                            })
             ->add('proveedor', 
                   EntityType::class,
                   [

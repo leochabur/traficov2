@@ -21,6 +21,20 @@ use GestionBundle\Entity\segVial\documentacion\finanzas\CuotaUnidad;
 use GestionBundle\Entity\segVial\documentacion\Vencimiento;
 use GestionBundle\Form\segVial\documentacion\finanzas\CuotaVencimientoType;
 
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\TurismoNacional;
+use GestionBundle\Form\segVial\documentacion\habilitaciones\TurismoNacionalType;
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\OfertaLibre;
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\Habilitacion;
+
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\Charter;
+use GestionBundle\Form\segVial\documentacion\habilitaciones\CharterType;
+
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\Contratado;
+use GestionBundle\Form\segVial\documentacion\habilitaciones\ContratadoType;
+
+use GestionBundle\Entity\segVial\documentacion\habilitaciones\TurismoProvincial;
+use GestionBundle\Form\segVial\documentacion\habilitaciones\TurismoProvincialType;
+
 /**
  * @Route("/documentos")
  */
@@ -472,6 +486,16 @@ class GestionDocumentosController extends AbstractController
         }
         else
         {
+            $original = $seguro->getRenuevaVencimiento();
+            if ($original)
+            {
+                foreach ($original->getUnidades() as $u)
+                {
+                    $seguro->addUnidade($u);
+                }
+            }
+            $original->setActivo(false);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($seguro);
             $em->flush();
@@ -499,7 +523,9 @@ class GestionDocumentosController extends AbstractController
         return $this->render('controller/gestion_documentos/nuevoSeguro.html.twig', 
                              [
                                 'form' => $form->createView(),
-                                'label' => 'Modificar Seguro'
+                                'label' => 'Modificar Seguro',
+                                'vtv' => $seguro,
+                                'edicion' => true
                              ]);
     }
 
@@ -547,7 +573,9 @@ class GestionDocumentosController extends AbstractController
                      [
                         'form' => $form->createView(),
                         'label' => 'Modificar Seguro',
-                        'errors' => $details
+                        'errors' => $details,
+                        'vtv' => $seguro,
+                        'edicion' => true
                      ]);
         }
         else
@@ -556,5 +584,158 @@ class GestionDocumentosController extends AbstractController
             $this->addFlash('success', 'Seguro modificado exitosamente!');
             return $this->redirectToRoute('controller_gestion_documentos_home_seguro');
         }
+    }
+
+    /**
+     * @Route("/habilitacion/home", name="controller_gestion_documentos_home_habilitaciones")
+     */
+    public function habilitacionesIndex(): Response
+    {
+        $repository = $this->getDoctrine()->getManager()->getRepository(Habilitacion::class);
+        $detalle = $repository->getAllHabilitacionesActivas();
+        return $this->render('controller/gestion_documentos/habilitaciones/index.html.twig', ['detalle' => $detalle]);
+    }
+
+
+    /**
+     * @Route("/habilitacion/gestionar/{type}/{id}", name="controller_gestion_documentos_nueva_habilitaciones")
+     */
+    public function nuevaHabilitacion($type, $id = 0): Response
+    {
+
+        $formHabilitaciones = [ 9 => TurismoNacionalType::class,
+                                11 => CharterType::class,
+                                12 => ContratadoType::class,
+                                14 => TurismoProvincialType::class];
+        $classHabilitaciones = [ 9 => TurismoNacional::class,
+                                11 => Charter::class,
+                                12 => Contratado::class,
+                                14 => TurismoProvincial::class];
+
+        $params = [];
+
+        if ($id) //significa que se va a edityar una habilitacion
+        {
+            $em = $this->getDoctrine()->getManager();
+            $habilitacion = $em->find(Habilitacion::class, $id);
+            $url = $this->generateUrl('controller_gestion_documentos_procesar_nueva_habilitaciones', ['type' => $type, 'id' => $id]);
+            $type = $habilitacion->getType();
+            $label = 'Modificar '.$habilitacion->getTexto();
+            $params['edicion'] = true;
+            $params['vtv'] = $habilitacion;
+        }
+        else
+        {
+            if (!array_key_exists($type, $classHabilitaciones))
+            {
+                $this->addFlash('error', 'Tipo de documento inexistente!');
+                return $this->redirectToRoute('controller_gestion_documentos_home_habilitaciones');
+            }
+
+            $habilitacion = new $classHabilitaciones[$type];
+            $url = $this->generateUrl('controller_gestion_documentos_procesar_nueva_habilitaciones', ['type' => $type]);
+            
+            $label = 'Nueva '.$habilitacion->getTexto();
+        }
+
+        $form = $this->getFormAltaHabilitacion($formHabilitaciones[$type], $habilitacion, $url);
+
+        $params['label'] = $label;
+        $params['form'] = $form->createView();
+        return $this->render('controller/gestion_documentos/habilitaciones/nuevoHabilitacion.html.twig', 
+                                $params
+                             );
+    }
+
+    /**
+     * @Route("/habilitacion/nuevo/procesar/{type}/{id}", name="controller_gestion_documentos_procesar_nueva_habilitaciones")
+     */
+    public function procesarNuevaHabilitacion($type, $id = 0, Request $request): Response
+    {
+
+        $formHabilitaciones = [ 9 => TurismoNacionalType::class,
+                                11 => CharterType::class,
+                                12 => ContratadoType::class,
+                                14 => TurismoProvincialType::class];
+        $classHabilitaciones = [ 9 => TurismoNacional::class,
+                                11 => Charter::class,
+                                12 => Contratado::class,
+                                14 => TurismoProvincial::class];
+        $em = $this->getDoctrine()->getManager();
+
+        if ($id) //significa que se va a edityar una habilitacion
+        {
+            
+            $habilitacion = $em->find(Habilitacion::class, $id);
+            $url = $this->generateUrl('controller_gestion_documentos_procesar_nueva_habilitaciones', ['type' => $type, 'id' => $id]);
+            $type = $habilitacion->getType();
+            $label = 'Modificar '.$habilitacion->getTexto();
+        }
+        else
+        {
+            if (!array_key_exists($type, $classHabilitaciones))
+            {
+                $this->addFlash('error', 'Tipo de documento inexistente!');
+                return $this->redirectToRoute('controller_gestion_documentos_home_habilitaciones');
+            }
+
+            $habilitacion = new $classHabilitaciones[$type];
+            $url = $this->generateUrl('controller_gestion_documentos_procesar_nueva_habilitaciones', ['type' => $type]);            
+            $label = 'Nueva '.$habilitacion->getTexto();
+        }
+
+        $form = $this->getFormAltaHabilitacion($formHabilitaciones[$type], $habilitacion, $url);
+
+        $form->handleRequest($request);
+
+        $validator = $this->validator;
+
+        $groups = ['general'];
+
+        $errors = $validator->validate($habilitacion, null, $groups);
+
+        $details = [];
+
+        if (count($errors))
+        {            
+            foreach ($errors as $e)
+            {
+                $const = $e->getConstraint();
+                $groups = $const->groups;
+                $details[$groups[0]][] = $const->message;                          
+            }
+
+            return $this->render('controller/gestion_documentos/habilitaciones/nuevoHabilitacion.html.twig', 
+                     [
+                        'form' => $form->createView(),
+                        'label' => $label,
+                        'errors' => $details
+                     ]);
+        }
+        $action = 'modificada';
+        if (!$id)
+        {
+            $original = $habilitacion->getRenuevaVencimiento();
+            if ($original)
+            {
+                foreach ($original->getUnidades() as $u)
+                {
+                    $habilitacion->addUnidade($u);
+                }
+            }
+            
+            $original->setActivo(false);
+            $action = 'generada';
+            $em->persist($habilitacion);
+        }
+        $em->flush();
+
+        $this->addFlash('success', 'Habilitacion '.$action.' exitosamente!');
+        return $this->redirectToRoute('controller_gestion_documentos_home_habilitaciones');
+    }
+
+    private function getFormAltaHabilitacion($class, $vtv, $url)
+    {
+        return $this->createForm($class, $vtv, ['action' => $url,'method' => 'POST']);
     }
 }

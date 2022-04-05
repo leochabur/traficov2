@@ -27,4 +27,8 @@ class VerificacionTecnicaProvincial extends VerificacionTecnica
         return 2;
      }
 
+    public function getTexto()
+    {
+        return "VTV Provincial";
+    }
 }

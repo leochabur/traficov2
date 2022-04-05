@@ -9,12 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 use GestionBundle\Entity\segVial\documentacion\finanzas\CuotaVencimiento;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * @ORM\Table(name="gest_docum_vencimientos")
  * @ORM\Entity(repositoryClass=VencimientoRepository::class)
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="vtoType", type="integer")
- * @ORM\DiscriminatorMap({1:"Vencimiento", 2: "VencimientoUnidad", 3:"Seguro", 4: "VerificacionTecnica", 5: "VerificacionTecnicaNacional", 6: "VerificacionTecnicaProvincial", 7:"Habilitacion"})
+ * @ORM\DiscriminatorMap({1:"Vencimiento", 2: "VencimientoUnidad", 3:"Seguro", 4: "VerificacionTecnica", 5: "VerificacionTecnicaNacional", 6: "VerificacionTecnicaProvincial", 7:"GestionBundle\Entity\segVial\documentacion\habilitaciones\Habilitacion", 8:"GestionBundle\Entity\segVial\documentacion\habilitaciones\HabilitacionNacional", 9:"GestionBundle\Entity\segVial\documentacion\habilitaciones\TurismoNacional",10:"GestionBundle\Entity\segVial\documentacion\habilitaciones\OfertaLibre", 11:"GestionBundle\Entity\segVial\documentacion\habilitaciones\Charter", 12:"GestionBundle\Entity\segVial\documentacion\habilitaciones\Contratado", 13:"GestionBundle\Entity\segVial\documentacion\habilitaciones\HabilitacionProvincial", 14:"GestionBundle\Entity\segVial\documentacion\habilitaciones\TurismoProvincial"})
  */
 
 abstract class Vencimiento
@@ -77,6 +78,11 @@ abstract class Vencimiento
      * @ORM\OneToMany(targetEntity="GestionBundle\Entity\segVial\documentacion\finanzas\CuotaVencimiento", mappedBy="vencimiento", cascade={"persist", "remove"})
      */
     private $cuotasVencimientos;
+
+
+    public abstract function getType();
+
+    public abstract function getTexto();
 
     public function __construct()
     {

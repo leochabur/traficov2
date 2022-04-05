@@ -1,6 +1,6 @@
 <?php
 
-namespace GestionBundle\Entity\segVial\documentacion;
+namespace GestionBundle\Entity\segVial\documentacion\habilitaciones;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,24 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
 use GestionBundle\Entity\segVial\Unidad;
 
 /**
- * @ORM\Table(name="gest_docum_habilitaciones)
+ * @ORM\Table(name="gest_docum_habilitaciones_provincial")
  * @ORM\Entity
  */
 
-abstract class Habilitacion extends Vencimiento
+abstract class HabilitacionProvincial extends Habilitacion
 {
-
-    /** 
-     * @ORM\Column
-     * 
-     */
-    private $numero;
 
     public function __construct()
     {
           parent::__construct();
 
     }
-
 
 }

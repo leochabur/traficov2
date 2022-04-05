@@ -27,4 +27,8 @@ class VerificacionTecnicaNacional extends VerificacionTecnica
         return 1;
      }
 
+    public function getTexto()
+    {
+        return "VTV Nacional";
+    }
 }

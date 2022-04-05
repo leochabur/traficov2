@@ -47,6 +47,16 @@ class Seguro extends VencimientoUnidad
      */
     private $cobertura;
 
+    public function getTexto()
+    {
+        return "Seguro Automotor";
+    }
+
+    public function getType()
+    {
+        return 3;
+    }
+
     public function __toString()
     {
         return 'POLIZA '.$this->poliza.' - ' .$this->getProveedor();

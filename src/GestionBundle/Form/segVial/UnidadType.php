@@ -16,7 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
+use GestionBundle\Entity\segVial\documentacion\Vencimiento;
 use GestionBundle\Entity\segVial\documentacion\Seguro;
+
+use Doctrine\ORM\EntityRepository;
 
 class UnidadType extends AbstractType
 {
@@ -49,7 +52,12 @@ class UnidadType extends AbstractType
                           EntityType::class,
                           [
                             'class' => Seguro::class,
-                            'multiple' => true
+                            'multiple' => true,
+                             'query_builder' => function (EntityRepository $er) {
+                                                            $qb = $er->createQueryBuilder('u');
+                                                            return $qb->where('u.activo = :activo')
+                                                                      ->setParameter('activo', true);
+                                                     },
                           ])
 
                     ->add('carroceriaMarca', TextType::class)

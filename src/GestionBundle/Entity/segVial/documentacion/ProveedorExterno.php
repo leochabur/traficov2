@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="extType", type="integer")
- * @ORM\DiscriminatorMap({1:"ProveedorExterno", 2: "CompaniaSeguro", 3: "PlantaVerificacion"})
+ * @ORM\DiscriminatorMap({1:"ProveedorExterno", 2: "CompaniaSeguro", 3: "PlantaVerificacion", 4:"OrganismoEstatal"})
  */
 abstract class ProveedorExterno
 {
