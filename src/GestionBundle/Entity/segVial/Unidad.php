@@ -371,7 +371,6 @@ class Unidad
         foreach ($this->vencimientos as $v)
         {
             $v->addUnidade($this);
-            throw new \Exception('sdfsfsdfdsf');
         }
     }
 
