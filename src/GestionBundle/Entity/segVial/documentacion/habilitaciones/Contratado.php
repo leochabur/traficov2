@@ -48,4 +48,8 @@ class Contratado extends OfertaLibre
         return $this;
     }
 
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
 }

@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use GestionBundle\Entity\segVial\documentacion\Vencimiento;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class CuotaVencimientoType extends AbstractType
 {
@@ -22,7 +24,7 @@ class CuotaVencimientoType extends AbstractType
             ->add('fechaPago', DateType::class, [
                                                     'widget' => 'single_text',
                                                 ])
-            ->add('monto')
+            
             ->add('vencimiento',
                    EntityType::class,
                   [
@@ -30,6 +32,10 @@ class CuotaVencimientoType extends AbstractType
                      'choices' => [$vto]
                   ])
         ;
+        if (!$vto->getCalculaPagoAutomaticamente())
+        {
+            $builder->add('monto');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

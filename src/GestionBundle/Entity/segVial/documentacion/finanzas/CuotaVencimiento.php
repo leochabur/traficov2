@@ -35,15 +35,13 @@ class CuotaVencimiento
     private $fechaPago;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      * @Assert\Type(        
      *     type="float",
      *     message="El importe debe ser numerico",
      *     groups={"general"}
      * )
-     * @Assert\NotNull(message="Debe ingresar un monto numerico", groups={"general", "tecnical"})
      */
-     
     private $monto;
 
     /**

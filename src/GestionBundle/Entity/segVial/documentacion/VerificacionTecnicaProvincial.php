@@ -31,4 +31,9 @@ class VerificacionTecnicaProvincial extends VerificacionTecnica
     {
         return "VTV Provincial";
     }
+
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
 }

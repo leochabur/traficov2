@@ -31,4 +31,9 @@ class VerificacionTecnicaNacional extends VerificacionTecnica
     {
         return "VTV Nacional";
     }
+
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
 }

@@ -80,9 +80,13 @@ abstract class Vencimiento
     private $cuotasVencimientos;
 
 
+
+
     public abstract function getType();
 
     public abstract function getTexto();
+
+    public abstract function getCalculaPagoAutomaticamente();
 
     public function __construct()
     {

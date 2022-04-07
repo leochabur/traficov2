@@ -27,4 +27,9 @@ class TurismoNacional extends HabilitacionNacional
         return "Habilitacion Turismo Nacional";
     }
 
+    public function getCalculaPagoAutomaticamente()
+    {
+        return true;
+    }
+
 }

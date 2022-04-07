@@ -61,10 +61,17 @@ class GestionDocumentosController extends AbstractController
             $em = $this->getDoctrine()->getManager();
 
             $vto = $em->find(Vencimiento::class, $id);
+            $auto = $vto->getCalculaPagoAutomaticamente();
 
             $url = $this->generateUrl('controller_gestion_documentos_pagos_registrar_cuuota', ['id' => $id]);
 
             $cuota = new CuotaVencimiento();
+
+            if ($auto)
+            {
+                $cuota->setMonto(0.0);
+            }
+
             $form = $this->getFormAddCuotaVencimiento($cuota, $url, $vto);
 
             $form->handleRequest($request);
@@ -76,6 +83,8 @@ class GestionDocumentosController extends AbstractController
             $errors = $validator->validate($cuota, null, $groups);
 
             $details = [];
+
+            //throw new \Exception($cuota->getMonto());
 
             if (count($errors))
             {               
@@ -96,15 +105,24 @@ class GestionDocumentosController extends AbstractController
             }
 
             $montoUnitario = ($cuota->getMonto() / $vto->getUnidades()->count());
+            $montoTotal = $cuota->getMonto();
+
+            
 
             foreach ($vto->getUnidades() as $u)
             {
-                $cu = new CuotaUnidad();
-                $cu->setMonto($montoUnitario);
-                $cu->setUnidad($u);
-                $cuota->addCuotasUnidade($cu);
+                    $cu = new CuotaUnidad();
+                    if ($auto)
+                    {
+                        $montoUnitario = $u->getHabilitacion()->getAlicuota();
+                        $montoTotal+= $montoUnitario;
+                        
+                    }
+                    $cu->setMonto($montoUnitario);
+                    $cu->setUnidad($u);
+                    $cuota->addCuotasUnidade($cu);
             }
-
+            $cuota->setMonto($montoTotal);
             $em->persist($cuota);
             $em->flush();
             return new JsonResponse(['ok' => true, 'monto' => $montoUnitario]);

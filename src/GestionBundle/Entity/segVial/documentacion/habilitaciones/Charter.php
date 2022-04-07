@@ -27,5 +27,10 @@ class Charter extends OfertaLibre
     {
         return "Oferta Libre (Charter)";
     }
+    
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
 
 }

@@ -127,5 +127,9 @@ class Seguro extends VencimientoUnidad
         return $this;
     }
 
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
 
 }

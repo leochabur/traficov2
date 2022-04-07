@@ -47,4 +47,9 @@ class TurismoProvincial extends HabilitacionProvincial
         return $this;
     }
 
+    public function getCalculaPagoAutomaticamente()
+    {
+        return false;
+    }
+
 }
