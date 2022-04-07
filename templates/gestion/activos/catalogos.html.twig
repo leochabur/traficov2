@@ -83,6 +83,32 @@
     </div>
   </div>
 
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Tipo Habilitaciones
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-tipos-habilitaciones" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-tipo-hab" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-tipo-hab"
+			        		href="{{ path('activos_gestion_catalogos_tipos_habilitacion_cnrt') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-tipo-hab" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body" id="body-tipos-habilitaciones">
+		      	
+		      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock content %}
@@ -90,6 +116,12 @@
 {% block javascripts %}
 
 	<script type="text/javascript">
+
+		  		function refreshTab(id, url)
+	  		{
+	  					$('#'+id).load(url);
+	  		}
+
 			  $(document).ready(function() {
 
 			  	  let collapse = false;
@@ -100,10 +132,7 @@
 						})
 
 
-			  		function refreshTab(id, url)
-			  		{
-			  					$('#'+id).load(url);
-			  		}
+
 
 			  		$('.load-ajax').click(function(){
 			  																			var a = $(this);

@@ -31,9 +31,22 @@ class HabilitacionUnidad   ///correspondoe a habilitaciones CNRT
      * @var string
      *
      * @ORM\Column(name="calidad", type="string", length=255)
-     * @Assert\NotNull(message="El campo no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo habilitacion no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $habilitacion;
+
+
+    /**
+     * @ORM\Column(name="alicuota", type="float", nullable=true)
+     * @Assert\NotNull(message="El campo alicuota no puede permanecer en blanco", groups={"general", "tecnical"})
+     */
+    private $alicuota;
+
+    /**
+     * @ORM\Column(name="activa", type="boolean"), nullable=true)
+     */
+    private $activa = true;
+
 
     public function __toString()
     {
@@ -58,6 +71,30 @@ class HabilitacionUnidad   ///correspondoe a habilitaciones CNRT
     public function setHabilitacion(string $habilitacion): self
     {
         $this->habilitacion = $habilitacion;
+
+        return $this;
+    }
+
+    public function getAlicuota(): ?float
+    {
+        return $this->alicuota;
+    }
+
+    public function setAlicuota(?float $alicuota): self
+    {
+        $this->alicuota = $alicuota;
+
+        return $this;
+    }
+
+    public function getActiva(): ?bool
+    {
+        return $this->activa;
+    }
+
+    public function setActiva(bool $activa): self
+    {
+        $this->activa = $activa;
 
         return $this;
     }

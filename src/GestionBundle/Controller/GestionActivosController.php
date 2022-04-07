@@ -32,9 +32,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use GestionBundle\Entity\opciones\DocumentoAdjunto;
 use GestionBundle\Form\opciones\DocumentoAdjuntoType;
+use GestionBundle\Entity\segVial\opciones\HabilitacionUnidad;
+use GestionBundle\Form\segVial\opciones\HabilitacionType;
 
 /**
- * @Route("/ventas")
+ * @Route("/activos")
  */
 
 class GestionActivosController extends AbstractController
@@ -48,6 +50,96 @@ class GestionActivosController extends AbstractController
         $this->validator = $validator;
         $this->params = $params;
     }
+
+
+    //////administrar tipos habilitaciones
+
+    /**
+     * @Route("/catalogs/tipohab", name="activos_gestion_catalogos_tipos_habilitacion_cnrt")
+     */
+    public function gestionCatalogosTipoHabCNRT(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $data = $em->getRepository(HabilitacionUnidad::class)->getTiposHabilitacionActiva();
+
+        $form = $this->getFormAltaHabilitacion(new HabilitacionUnidad());
+
+        return $this->render('gestion/activos/opciones/ambHabilitacionesUnidades.html.twig', ['form' => $form->createView() ,'habilitaciones' => $data]);
+    }
+
+    private function getFormAltaHabilitacion($tipo)
+    {
+        return $this->createForm(HabilitacionType::class, $tipo);
+    }
+
+    /**
+     * @Route("/catalogs/tipohab/procesar/{id}", name="activos_gestion_catalogos_tipos_habilitacion_cnrt_procesar")
+     */
+    public function gestionCatalogosTipoHabCNRTProcesar($id = 0, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($id)
+        {
+            $tipo = $em->find(HabilitacionUnidad::class, $id);
+        }
+        else
+        {
+            $tipo = new HabilitacionUnidad();
+        }
+
+        $form = $this->getFormAltaHabilitacion($tipo);
+        $form->handleRequest($request);
+
+        $errors = $this->validateEntity($tipo);
+
+        if (count($errors))
+        {
+            return new JsonResponse(['ok' => false, 'errors' => $errors]);
+        }
+        
+
+        try
+        {
+            if (!$id)
+            {
+                $em->persist($tipo);
+            }
+
+            $em->flush();
+            return new JsonResponse(['ok' => true]);
+        }
+        catch (\Exception $e) { return new JsonResponse(['ok' => false]);}
+    }
+
+    private function validateEntity($entity)
+    {
+        $validator = $this->validator;//get('validator');
+
+        $groups = ['general'];
+
+
+        $errors = $validator->validate($entity, null, $groups);
+
+        $details = [];
+
+        if (count($errors))
+        {
+            
+            foreach ($errors as $e)
+            {
+                $const = $e->getConstraint();
+                $groups = $const->groups;
+
+                    $details[$groups[0]][] = $const->message;
+                          
+            }
+        }
+        return $details;
+    }
+
+    //////////////////////
+
 
 
     /**
