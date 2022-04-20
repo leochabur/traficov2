@@ -15,20 +15,22 @@
 
 						</div>
 				</div>
-		<table id="dt-filter-select" class="table table-sm table-hover table-striped table-bordered ml-1 mr-1" cellspacing="0" width="100%">
+		<table class="table table-sm table-hover table-striped table-bordered ml-1 mr-1 data-table-habilitaciones" cellspacing="0" width="100%">
 		  <thead>
 		    <tr>
 		      <th scope="col"></th>
 		      <th scope="col">Habilitacion</th>
 		      <th scope="col">Alicuota</th>
+		      <th>Activa</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		  	{% for u in habilitaciones %}
 		  		<tr>		
-		  			<td><a class="edit_hab" href="{{ path('activos_gestion_catalogos_tipos_habilitacion_cnrt_procesar', { id : u.id }) }}"><i class="fas fa-pencil-alt"></i></a></td>
+		  			<td><a <a data-active="{{ (u.activa?'true':'false') }}" class="edit_hab" href="{{ path('activos_gestion_catalogos_tipos_habilitacion_cnrt_procesar', { id : u.id }) }}"><i class="fas fa-pencil-alt"></i></a></td>
 		  			<td>{{ u.habilitacion|upper }}</td>
 		  			<td>{{ u.alicuota }}</td>
+		  			<td>{{ (u.activa?'SI':'NO') }}</td>
 		  		</tr>
 		  	{% endfor %}
 		  </tbody>
@@ -56,6 +58,12 @@
 	          	{{ form_label(form.alicuota)}}
 	          	{{ form_widget(form.alicuota, { 'attr' : {'class' : 'form-control alic'}})}}
 	        </div>
+			<div class="form-row mx-3">
+				<div class="form-group col-lg-12">
+					{{ form_label(form.activa)}}
+					{{ form_widget(form.activa, { 'attr' : {'class' : 'form-control active-habilitacion'}})}}
+				</div>
+			</div>
 		      <div class="form-row">
 		        <div class="col-lg-10 ml-2 mr-4 mt-2">
 		          <ul class="fa-ul text-danger" id="error-msg">
@@ -123,9 +131,27 @@
 
 													$('.habil').val(a.parent().siblings('td').eq(0).html());
 													$('.alic').val(a.parent().siblings('td').eq(1).html());
-
+													$(".active-habilitacion").prop( "checked", a.data('active'));
 													$('#modalLoginForm').modal('show');
 				});
+
+	$('.data-table-habilitaciones').dataTable({          
+		    													"paging": true,
+																"info" : false,
+																"searching": false,
+																"lengthChange": false,
+																"bFilter" : true,
+																"language": {
+														    				"paginate": {
+																					      "first": "Primera",
+																					      "last": "Ultima",
+																					      "previous" : "Anterior",
+																					      "next" : "Siguiente"
+																					    }
+																  			}
+	  								});
+
+
 
 		});
 

@@ -14,7 +14,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *     fields={"tipo"},
  *     errorPath="tipo",
- *     message="Tipo de unidad existente en la Base de Datos"
+ *     message="Tipo de unidad existente en la Base de Datos",
+ *     groups={"general", "tecnical"}
  * )
  */
 class TipoUnidad
@@ -32,11 +33,15 @@ class TipoUnidad
      * @var string
      *
      * @ORM\Column(name="tipo", type="string", length=255, unique=true)
-     * @Assert\NotNull(message="El campo no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo tipo no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $tipo;
 
-
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $activo = true;
+    
     public function __toString()
     {
         return strtoupper($this->tipo);
@@ -74,5 +79,17 @@ class TipoUnidad
     public function getTipo()
     {
         return $this->tipo;
+    }
+
+    public function getActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): self
+    {
+        $this->activo = $activo;
+
+        return $this;
     }
 }

@@ -35,14 +35,14 @@ class Ciudad
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
-     * @Assert\NotNull(message="El campo nombre no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo nombre no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $nombre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Provincia")
      * @ORM\JoinColumn(name="id_provincia", referencedColumnName="id")
-     * @Assert\NotNull(message="El campo provincia no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo provincia no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $provincia;
 
@@ -62,13 +62,13 @@ class Ciudad
     
     /**
      * @ORM\Column(name="latitud", type="decimal", precision=15, scale=12)
-     * @Assert\NotNull(message="El campo latitud no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo latitud no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $latitud;
 
     /**
      * @ORM\Column(name="longitud", type="decimal", precision=15, scale=12)
-     * @Assert\NotNull(message="El campo longitud no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo longitud no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $longitud;
 

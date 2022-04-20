@@ -14,7 +14,7 @@ class CalidadUnidadType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('calidad')->add('guardar', SubmitType::class);
+        $builder->add('calidad')->add('activo')->add('guardar', SubmitType::class);
     }/**
      * {@inheritdoc}
      */

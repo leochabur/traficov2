@@ -14,7 +14,7 @@ class TipoMotorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('tipo')->add('guardar', SubmitType::class);
+        $builder->add('tipo')->add('activo')->add('guardar', SubmitType::class);
     }/**
      * {@inheritdoc}
      */

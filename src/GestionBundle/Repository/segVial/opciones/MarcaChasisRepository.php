@@ -10,4 +10,12 @@ namespace GestionBundle\Repository\segVial\opciones;
  */
 class MarcaChasisRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllMarcas()
+    {
+        $data =  $this->createQueryBuilder('u')
+                        ->orderBy('u.marca')
+                        ->getQuery()
+                        ->getResult();
+        return $data;
+    }
 }

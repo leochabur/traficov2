@@ -14,7 +14,7 @@ class CiudadRepository extends \Doctrine\ORM\EntityRepository
     public function getAllCiudades(\AppBundle\Entity\Estructura $estructura = null)
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select(array('c.id as id, c.nombre as ciudad, p.nombre as provincia'))
+        $qb->select(array('c.id as id, c.nombre as ciudad, p.nombre as provincia, c.latitud, c.longitud, p.id as idpcia'))
             ->join('c.provincia', 'p');
         if ($estructura)
         {

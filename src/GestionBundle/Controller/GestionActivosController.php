@@ -34,6 +34,11 @@ use GestionBundle\Entity\opciones\DocumentoAdjunto;
 use GestionBundle\Form\opciones\DocumentoAdjuntoType;
 use GestionBundle\Entity\segVial\opciones\HabilitacionUnidad;
 use GestionBundle\Form\segVial\opciones\HabilitacionType;
+use GestionBundle\Entity\segVial\opciones\MarcaChasis;
+use GestionBundle\Form\segVial\opciones\MarcaChasisType;
+use GestionBundle\Entity\segVial\opciones\UbicacionMotor;
+use GestionBundle\Form\segVial\opciones\UbicacionMotorType;
+
 
 /**
  * @Route("/activos")
@@ -51,66 +56,7 @@ class GestionActivosController extends AbstractController
         $this->params = $params;
     }
 
-
-    //////administrar tipos habilitaciones
-
-    /**
-     * @Route("/catalogs/tipohab", name="activos_gestion_catalogos_tipos_habilitacion_cnrt")
-     */
-    public function gestionCatalogosTipoHabCNRT(Request $request)
-    {
-        $em = $this->getDoctrine();
-        $data = $em->getRepository(HabilitacionUnidad::class)->getTiposHabilitacionActiva();
-
-        $form = $this->getFormAltaHabilitacion(new HabilitacionUnidad());
-
-        return $this->render('gestion/activos/opciones/ambHabilitacionesUnidades.html.twig', ['form' => $form->createView() ,'habilitaciones' => $data]);
-    }
-
-    private function getFormAltaHabilitacion($tipo)
-    {
-        return $this->createForm(HabilitacionType::class, $tipo);
-    }
-
-    /**
-     * @Route("/catalogs/tipohab/procesar/{id}", name="activos_gestion_catalogos_tipos_habilitacion_cnrt_procesar")
-     */
-    public function gestionCatalogosTipoHabCNRTProcesar($id = 0, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        if ($id)
-        {
-            $tipo = $em->find(HabilitacionUnidad::class, $id);
-        }
-        else
-        {
-            $tipo = new HabilitacionUnidad();
-        }
-
-        $form = $this->getFormAltaHabilitacion($tipo);
-        $form->handleRequest($request);
-
-        $errors = $this->validateEntity($tipo);
-
-        if (count($errors))
-        {
-            return new JsonResponse(['ok' => false, 'errors' => $errors]);
-        }
-        
-
-        try
-        {
-            if (!$id)
-            {
-                $em->persist($tipo);
-            }
-
-            $em->flush();
-            return new JsonResponse(['ok' => true]);
-        }
-        catch (\Exception $e) { return new JsonResponse(['ok' => false]);}
-    }
+    ////////////////UTILS///////////////////
 
     private function validateEntity($entity)
     {
@@ -138,28 +84,258 @@ class GestionActivosController extends AbstractController
         return $details;
     }
 
+    private function gestonarRequest(Request $request, $class, $classType, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if ($id)
+        {
+            $entity = $em->find($class, $id);
+        }
+        else
+        {
+            $entity = new $class();
+        }
+        $form = $this->createForm($classType, $entity); //$this->getFormAltaMarcaChasis($entity);
+        $form->handleRequest($request);
+        $errors = $this->validateEntity($entity);
+        if (count($errors))
+        {
+            return new JsonResponse(['ok' => false, 'errors' => $errors]);
+        }    
+        try
+        {
+            if (!$id)
+            {
+                $em->persist($entity);
+            }
+            $em->flush();
+            return new JsonResponse(['ok' => true]);
+        }
+        catch (\Exception $e) { return new JsonResponse(['ok' => false]);}
+    }
+
+    /////CALIDAD UNIDAD
+    /**
+     * @Route("/catalogs/calidaduda", name="activos_gestion_catalogos_calidad_unidad")
+     */
+    public function gestionCatalogosCalidadUnidad()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(CalidadUnidad::class)->findAll();
+
+        $form = $this->createForm(CalidadUnidadType::class, new CalidadUnidad());
+
+        return $this->render('gestion/activos/opciones/abmCalidadUnidad.html.twig', ['form' => $form->createView() ,'calidades' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/calidaduda/procesar/{id}", name="activos_gestion_catalogos_calidad_unidad_procesar")
+     */
+    public function gestionCatalogosCalidadUnidadProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, CalidadUnidad::class, CalidadUnidadType::class, $id);
+    }
+
+    ///////////////
+
+    //////////////Ubicacion Motor
+    /**
+     * @Route("/catalogs/ubicacion", name="activos_gestion_catalogos_ubicacion_motor")
+     */
+    public function gestionCatalogosUbicacionMotor()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(UbicacionMotor::class)->findAll();
+
+        $form = $this->createForm(UbicacionMotorType::class, new UbicacionMotor());
+
+        return $this->render('gestion/activos/opciones/ubicacionMotor.html.twig', ['form' => $form->createView() ,'ubicaciones' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/ubicacion/procesar/{id}", name="activos_gestion_catalogos_ubicacion_procesar")
+     */
+    public function gestionCatalogosUbicacionProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, UbicacionMotor::class, UbicacionMotorType::class, $id);
+    }
+
+    /////////////////////
+    //////////////TIPO MOTOR
+    /**
+     * @Route("/catalogs/tipomotor", name="activos_gestion_catalogos_tipo_motor")
+     */
+    public function gestionCatalogosTipoMotor()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(TipoMotor::class)->findAll();
+
+        $form = $this->createForm(TipoMotorType::class, new TipoMotor());
+
+        return $this->render('gestion/activos/opciones/abmTipoMotor.html.twig', ['form' => $form->createView() ,'tipos' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/tipomotor/procesar/{id}", name="activos_gestion_catalogos_tipo_motor_procesar")
+     */
+    public function gestionCatalogosTipoMotorProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, TipoMotor::class, TipoMotorType::class, $id);
+    }
+
+    ///////////////////////
+
+    //////////////////MARCA CHASIS
+
+    /**
+     * @Route("/catalogs/marcaschasis", name="activos_gestion_catalogos_marcas_chasis")
+     */
+    public function gestionCatalogosMarcasChasis(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $data = $em->getRepository(MarcaChasis::class)->getAllMarcas();
+
+        $form = $this->createForm(MarcaChasisType::class, new MarcaChasis());
+
+        return $this->render('gestion/activos/opciones/marcasChasis.html.twig', ['form' => $form->createView() ,'marcas' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/marcaschasis/procesar/{id}", name="activos_gestion_catalogos_marcas_chasis_procesar")
+     */
+    public function gestionCatalogosMarcasChasisProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, MarcaChasis::class, MarcaChasisType::class, $id);
+    }
+    ///////////////FIN MARCA CHASUS
+
+
+    //////administrar tipos habilitaciones
+    /**
+     * @Route("/catalogs/tipohab", name="activos_gestion_catalogos_tipos_habilitacion_cnrt")
+     */
+    public function gestionCatalogosTipoHabCNRT(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $data = $em->getRepository(HabilitacionUnidad::class)->findAll();
+
+        $form = $this->createForm(HabilitacionType::class, new HabilitacionUnidad());
+
+        return $this->render('gestion/activos/opciones/ambHabilitacionesUnidades.html.twig', ['form' => $form->createView() ,'habilitaciones' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/tipohab/procesar/{id}", name="activos_gestion_catalogos_tipos_habilitacion_cnrt_procesar")
+     */
+    public function gestionCatalogosTipoHabCNRTProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, HabilitacionUnidad::class, HabilitacionType::class, $id);
+    }
+
+
+
     //////////////////////
+    /////////CATALOGOS CIUDADES
+
+    private function getFormAltaCiudad($ciudad)
+    {
+        return $this->createForm(CiudadType::class, $ciudad);
+    }
+
+    /**
+     * @Route("/catalogs/ciudades", name="activos_gestion_catalogos_ciudades")
+     */
+    public function gestionCatalogosCiudades(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $data = $em->getRepository(Ciudad::class)->getAllCiudades();
+
+        $form = $this->getFormAltaCiudad(new Ciudad());
+
+        return $this->render('gestion/activos/opciones/abmCiudades.html.twig', ['form' => $form->createView() ,'ciudades' => $data]);
+    }
 
 
+    /**
+     * @Route("/catalogs/ciudades/procesar/{id}", name="activos_gestion_catalogos_ciudades_procesar")
+     */
+    public function gestionCatalogosCiudadesProcesar($id = 0, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        if ($id)
+        {
+            $ciudad = $em->find(Ciudad::class, $id);
+        }
+        else
+        {
+            $ciudad = new Ciudad();
+        }
+
+        $form = $this->getFormAltaCiudad($ciudad);
+        $form->handleRequest($request);
+
+        $errors = $this->validateEntity($ciudad);
+
+        if (count($errors))
+        {
+            return new JsonResponse(['ok' => false, 'errors' => $errors]);
+        }
+        
+
+        try
+        {
+            if (!$id)
+            {
+                $em->persist($ciudad);
+            }
+
+            $em->flush();
+            return new JsonResponse(['ok' => true]);
+        }
+        catch (\Exception $e) { return new JsonResponse(['ok' => false]);}
+    }
+
+
+    //////////////////////CIUDADES
     /**
      * @Route("/catalogs", name="activos_gestion_catalogos")
      */
     public function gestionCatalogosVentas()
     {
-        $em = $this->getDoctrine();
-        $abmTipoUnidad = $this->getFormListAltaTipoUnidad(true);
+       // $em = $this->getDoctrine();
+       // $abmTipoUnidad = $this->getFormListAltaTipoUnidad(true);
 
         return $this->render('gestion/activos/catalogos.html.twig');
     }
 
 
-    private function getFormAltaTipoUnidad($tipo, $url)
+    ///////////////////TIPOS UNIDADES
+
+    private function getFormAltaTipoUnidad($tipo)
     {
-        return $this->createForm(TipoUnidadType::class, $tipo, ['action' => $url,'method' => 'POST']);
+        return $this->createForm(TipoUnidadType::class, $tipo);
     }
 
-    protected function getErrorMessages(\Symfony\Component\Form\Form $form) 
+
+    /**
+     * @Route("/catalogs/tiposunidad", name="activos_gestion_catalogos_tipo_unidad")
+     */
+    public function gestionCatalogosTiposUnidades(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $data = $em->getRepository(TipoUnidad::class)->getTiposUnidades();
+
+        $form = $this->getFormAltaTipoUnidad(new TipoUnidad());
+
+        return $this->render('gestion/activos/opciones/abmTipoUnidades.html.twig', ['form' => $form->createView() ,'tipos' => $data]);
+    }
+
+
+   /* protected function getErrorMessages(\Symfony\Component\Form\Form $form) 
     {
         $errors = array();
 
@@ -174,52 +350,49 @@ class GestionActivosController extends AbstractController
         }
 
         return $errors;
-    }
+    }*/
 
     /**
-     * @Route("/catalogs/tiposunidad/procesar", name="activos_gestion_catalogos_tipo_unidad_procesar", methods={"POST"})
+     * @Route("/catalogs/tiposunidad/procesar/{id}", name="activos_gestion_catalogos_tipo_unidad_procesar", methods={"POST"})
      */
-    public function prcesarAltaTipoUnidad(Request $request)
+    public function gestionCatalogosTipoUnidadProcesar($id = 0, Request $request)
     {
-        $tipo = new TipoUnidad();
-        $form = $this->getFormAltaTipoUnidad($tipo, $this->generateUrl('activos_gestion_catalogos_tipo_unidad_procesar'));
+        $em = $this->getDoctrine()->getManager();
 
+        if ($id)
+        {
+            $tipo = $em->find(TipoUnidad::class, $id);
+        }
+        else
+        {
+            $tipo = new TipoUnidad();
+        }
+
+        $form = $this->getFormAltaTipoUnidad($tipo);
         $form->handleRequest($request);
-        if ($form->isValid()) 
-        {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tipo);
-            $em->flush();
 
-            if( $request->isXmlHttpRequest()) 
+        $errors = $this->validateEntity($tipo);
+
+        if (count($errors))
+        {
+            return new JsonResponse(['ok' => false, 'errors' => $errors]);
+        }
+        
+
+        try
+        {
+            if (!$id)
             {
-                return new JsonResponse(['status' => true]);
+                $em->persist($tipo);
             }
-        }
 
-        if( $request->isXmlHttpRequest()) 
-        {
-            return new JsonResponse(['status' => false, 'errors' => $this->getErrorMessages($form)]);
+            $em->flush();
+            return new JsonResponse(['ok' => true]);
         }
+        catch (\Exception $e) { return new JsonResponse(['ok' => false]);}
     }
 
-    /**
-     * @Route("/catalogs/tiposunidad/alta", name="activos_gestion_catalogos_tipo_unidad")
-     */
-    public function getFormListAltaTipoUnidad($response = false)
-    {
-         $tipos = $this->getDoctrine()->getRepository(TipoUnidad::class)->findBy(array(), array('tipo' => 'ASC'));
-         $form = $this->getFormAltaTipoUnidad(new TipoUnidad(), $this->generateUrl('activos_gestion_catalogos_tipo_unidad_procesar'));
-         $content = $this->render('gestion/segVial/opciones/altaTipoUnidad.html.twig', ['tipos' => $tipos, 'label' => 'Nuevo', 'form' => $form->createView()]);
-         if ($response)
-         {
-            $response = new Response($content);
-            $response->headers->set('X-Robots-Tag','noindex');
-            return $response;
-         }
 
-         return $content;
-    }
 
 
 ////////////////////////manejo de unidades ///////////////////////////////

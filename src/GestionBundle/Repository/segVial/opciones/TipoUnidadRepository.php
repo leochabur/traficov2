@@ -10,4 +10,11 @@ namespace GestionBundle\Repository\segVial\opciones;
  */
 class TipoUnidadRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getTiposUnidades()
+    {
+        $data =  $this->createQueryBuilder('u')
+                        ->getQuery()
+                        ->getResult();
+        return $data;
+    }
 }

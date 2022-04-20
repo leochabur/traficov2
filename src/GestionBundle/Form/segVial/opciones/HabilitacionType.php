@@ -14,7 +14,7 @@ class HabilitacionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('habilitacion')->add('alicuota')->add('guardar', SubmitType::class);
+        $builder->add('habilitacion')->add('alicuota')->add('activa')->add('guardar', SubmitType::class);
     }/**
      * {@inheritdoc}
      */

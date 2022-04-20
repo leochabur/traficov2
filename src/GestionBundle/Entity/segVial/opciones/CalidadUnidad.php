@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
   * @UniqueEntity(
  *     fields={"calidad"},
  *     errorPath="calidad",
- *     message="Calidad de unidad existente en la Base de Datos"
+ *     message="Calidad de unidad existente en la Base de Datos",
+ *     groups={"general", "tecnical"}
  * )
  */
 class CalidadUnidad
@@ -31,10 +32,15 @@ class CalidadUnidad
      * @var string
      *
      * @ORM\Column(name="calidad", type="string", length=255)
-     * @Assert\NotNull(message="El campo no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo calidad no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $calidad;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $activo = true;
+    
     public function __toString()
     {
         return strtoupper($this->calidad);
@@ -72,5 +78,17 @@ class CalidadUnidad
     public function getCalidad()
     {
         return $this->calidad;
+    }
+
+    public function getActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): self
+    {
+        $this->activo = $activo;
+
+        return $this;
     }
 }
