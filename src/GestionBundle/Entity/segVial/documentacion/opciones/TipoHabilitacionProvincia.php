@@ -29,6 +29,10 @@ class TipoHabilitacionProvincia
      */
     private $tipo;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active = true;
 
     public function __toString()
     {
@@ -38,5 +42,29 @@ class TipoHabilitacionProvincia
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTipo(): ?string
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo(string $tipo): self
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
     }
 }

@@ -1,0 +1,170 @@
+
+<div class="card">
+	<div class="row pt-2 pb-2">
+
+		<div class="col d-flex align-items-end">
+			<a class="btn btn-sm round btn-success align-middle add_hab"><i class="fas fa-plus mr-1"></i>Agregar</a>
+		</div>
+
+  
+	</div>
+</div>
+<div class="card mt-1">
+	<div class="col-lg-2 mb-2">
+		<div class="row">
+
+		</div>
+	</div>
+	<table id="table-companias" class="table table-sm table-hover table-striped table-bordered ml-1 mr-1 data-table" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">Razon Social</th>
+				<th scope="col">CUIT</th>
+				<th scope="col">Activo</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for c in companias %}
+				<tr>		
+					<td><a data-active="{{ (c.active?'true':'false') }}" class="edit_hab" href="{{ path('seguridad_vial_gestion_catalogos_compania_seguro_procesar', { id : c.id }) }}"><i class="fas fa-pencil-alt"></i></a></td>
+					<td>{{ c.razonSocial|upper }}</td>
+					<td>{{ c.cuit }}</td>
+					<td>{{ (c.active?'SI':'NO') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+	<div class="modal-content">
+		<div class="modal-header text-center">
+			<h4 class="modal-title w-100 font-weight-bold title-form"></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body mx-3">
+			{{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'class' : 'data_send'}})}}
+			<div class="form-row mx-3">
+				<div class="form-group col-lg-6">
+					{{ form_label(form.razonSocial)}}
+					{{ form_widget(form.razonSocial, { 'attr' : {'class' : 'form-control city'}})}}
+				</div>
+				<div class="form-group col-lg-6">
+					{{ form_label(form.cuit)}}
+					{{ form_widget(form.cuit, { 'attr' : {'class' : 'form-control pcia'}})}}
+				</div>
+			</div>
+			<div class="form-row mx-3">
+				<div class="form-group col-lg-12">
+					{{ form_label(form.active, 'Activa')}}
+					{{ form_widget(form.active, { 'attr' : {'class' : 'form-control active-tipomotor'}})}}
+				</div>
+			</div>
+		      <div class="form-row">
+		        <div class="col-lg-10 ml-2 mr-4 mt-2">
+		          <ul class="fa-ul text-danger" id="error-msg">
+		          </ul>
+		        </div>
+		      </div>
+
+			<div class="form-row mx-3">
+				{{ form_widget(form.guardar, { 'attr' : {'class' : 'btn btn-primary send_form'}})}}
+			</div>
+			{{ form_end(form) }}
+
+		</div>
+	</div>
+</div>
+</div>  
+
+
+
+
+<script type="text/javascript">
+		
+		$(document).ready(function(){	
+
+				var path = "";
+
+				$('.send_form').click(function(event){
+														event.preventDefault();
+														$.post(path,
+															  $('.data_send').serialize(),
+															  function(data)
+															  {
+															  					console.log(data);
+															  					if (data.ok)
+															  					{
+															  						$('#modalLoginForm').modal('hide');
+															  						refreshTab('body-compania', "{{ path('seguridad_vial_gestion_catalogos_compania_seguro') }}");
+															  					}
+															  					else
+															  					{
+															  		 				$('#error-msg').empty();
+															  		 				if (!data.ok)
+															  		 				{
+															  		 					data.errors.general.map((e) => {
+															  		 											 $('#error-msg').append('<li><span class="fa-li"><i class="fas fa-times-circle"></i></span>'+e+'</li>');
+															  		 					});
+															  		 				}
+															  					}
+															  });
+				});
+
+				$('.add_hab').click(function(event){
+													event.preventDefault();
+													$('.title-form').html('Nueva Compañia Seguro');
+													$('.data_send')[0].reset();
+													$('#error-msg').empty();
+													path = "{{ path('seguridad_vial_gestion_catalogos_compania_seguro_procesar') }}";									
+													$('#modalLoginForm').modal('show');
+				});
+
+				$('.edit_hab').click(function(event){
+													event.preventDefault();
+													$('.title-form').html('Modificar Compañia Seguro');
+													$('.data_send')[0].reset();
+													var a = $(this);
+													$('#error-msg').empty();
+													path = a.attr('href');
+
+													$('.city').val(a.parent().siblings('td').eq(0).html());
+
+													$('.lat').val(a.parent().siblings('td').eq(2).html());
+													$('.lon').val(a.parent().siblings('td').eq(3).html());
+
+													$(".pcia option[value='"+a.parent().siblings('td').eq(1).data('pcia')+"']").attr("selected", true);
+
+													$('#modalLoginForm').modal('show');
+				});
+
+$('.multiple-select').multiselect({
+            buttonWidth: '250px'
+        });
+		    
+	$('#table-companias').dataTable({          
+		    													"paging": true,
+																"info" : false,
+																"searching": false,
+																"lengthChange": false,
+																"bFilter" : true,
+																"language": {
+														    				"paginate": {
+																					      "first": "Primera",
+																					      "last": "Ultima",
+																					      "previous" : "Anterior",
+																					      "next" : "Siguiente"
+																					    }
+																  			}
+	  								});
+
+		});
+
+</script>
+
+

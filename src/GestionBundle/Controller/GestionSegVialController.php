@@ -2,6 +2,10 @@
 
 namespace GestionBundle\Controller;
 
+use DH\Auditor\Provider\Doctrine\DoctrineProvider;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +31,14 @@ use GestionBundle\Entity\segVial\eventos\Infraccion;
 use GestionBundle\Form\segVial\eventos\InfraccionType;
 use GestionBundle\Entity\segVial\eventos\Evento;
 
+
+
 /**
  * @Route("/admin")
  */
 
 class GestionSegVialController extends AbstractController
 {
-
 
     //////////////ADMINISTRAR PEAJES////////////////////////
     /**

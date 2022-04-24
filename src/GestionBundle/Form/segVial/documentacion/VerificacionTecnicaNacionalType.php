@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use GestionBundle\Entity\segVial\documentacion\PlantaVerificacion;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 
 class VerificacionTecnicaNacionalType extends AbstractType
 {
@@ -19,9 +20,15 @@ class VerificacionTecnicaNacionalType extends AbstractType
         $builder
             ->add('vto', VencimientoType::class, ['data_class' => VerificacionTecnicaNacional::class])
             ->add('numeroCertificado')
-            ->add('proveedor',EntityType::class,
+            ->add('proveedor',
+                  EntityType::class,
                   [
-                    'class' => PlantaVerificacion::class
+                    'class' => PlantaVerificacion::class,
+                    'query_builder' => function (EntityRepository $er) {
+                                                                            return $er->createQueryBuilder('u')
+                                                                                      ->where("u.juisdiccion = 'NAC'")
+                                                                                      ->andWhere('u.active = true');
+                                                                        },
                   ])
             ->addEventListener(FormEvents::PRE_SET_DATA, 
                               function (FormEvent $event) {

@@ -3,6 +3,7 @@
 namespace GestionBundle\Entity\segVial\documentacion;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="gest_docum_proveedor_externo")
@@ -27,13 +28,14 @@ abstract class ProveedorExterno
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull(message="El campo razon social no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $razonSocial;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $active;
+    private $active = true;
 
     public function __toString()
     {

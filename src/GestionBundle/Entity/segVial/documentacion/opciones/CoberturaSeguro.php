@@ -14,7 +14,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
   * @UniqueEntity(
  *     fields={"cobertura"},
  *     errorPath="cobertura",
- *     message="Cobertura existente en la Base de Datos"
+ *     message="Cobertura existente en la Base de Datos",
+ *     groups={"general", "tecnical"}
  * )
  */
 
@@ -31,9 +32,14 @@ class CoberturaSeguro
 
     /**
      * @ORM\Column(name="cobertura", type="string", length=255)
-     * @Assert\NotNull(message="El campo no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $cobertura;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active = true;
 
     /**
      * @ORM\Column(type="boolean")
@@ -71,6 +77,18 @@ class CoberturaSeguro
     public function setRequiereSumaAsegurada(bool $requiereSumaAsegurada): self
     {
         $this->requiereSumaAsegurada = $requiereSumaAsegurada;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

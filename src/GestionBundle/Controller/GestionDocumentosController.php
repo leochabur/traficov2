@@ -2,7 +2,9 @@
 
 namespace GestionBundle\Controller;
 
+use DH\Auditor\Provider\Doctrine\DoctrineProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,19 +37,232 @@ use GestionBundle\Form\segVial\documentacion\habilitaciones\ContratadoType;
 use GestionBundle\Entity\segVial\documentacion\habilitaciones\TurismoProvincial;
 use GestionBundle\Form\segVial\documentacion\habilitaciones\TurismoProvincialType;
 
+use GestionBundle\Form\segVial\documentacion\CompaniaSeguroType;
+
+use GestionBundle\Entity\segVial\documentacion\opciones\TipoDestinoSeguro;
+use GestionBundle\Form\segVial\opciones\TipoDestinoSeguroType;
+use GestionBundle\Entity\segVial\documentacion\opciones\CoberturaSeguro;
+use GestionBundle\Form\segVial\opciones\CoberturaSeguroType;
+use GestionBundle\Entity\segVial\documentacion\PlantaVerificacion;
+use GestionBundle\Form\segVial\opciones\PlantaVerificacionType;
+use GestionBundle\Entity\segVial\documentacion\OrganismoEstatal;
+use GestionBundle\Form\segVial\opciones\OrganismoEmisorType;
+
 /**
  * @Route("/documentos")
  */
 
 class GestionDocumentosController extends AbstractController
 {
+    private $provider, $validator, $params;
 
-    private $validator;
-
-    public function __construct(ValidatorInterface $validator)
+    public function __construct(DoctrineProvider $dp, ValidatorInterface $validator, ParameterBagInterface $params)
     {
+        $this->provider = $dp;
         $this->validator = $validator;
+        $this->params = $params;
     }
+
+    ////////////////UTILS///////////////////
+
+    private function validateEntity($entity)
+    {
+        $validator = $this->validator;//get('validator');
+
+        $groups = ['general'];
+
+
+        $errors = $validator->validate($entity, null, $groups);
+
+        $details = [];
+
+        if (count($errors))
+        {
+            
+            foreach ($errors as $e)
+            {
+                $const = $e->getConstraint();
+                $groups = $const->groups;
+
+                    $details[$groups[0]][] = $const->message;
+                          
+            }
+        }
+        return $details;
+    }
+
+    
+    private function gestonarRequest(Request $request, $class, $classType, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if ($id)
+        {
+            $entity = $em->find($class, $id);
+        }
+        else
+        {
+            $entity = new $class();
+        }
+        $form = $this->createForm($classType, $entity); //$this->getFormAltaMarcaChasis($entity);
+        $form->handleRequest($request);
+        $errors = $this->validateEntity($entity);
+        if (count($errors))
+        {
+            return new JsonResponse(['ok' => false, 'errors' => $errors]);
+        }    
+        try
+        {
+            if (!$id)
+            {
+                $em->persist($entity);
+            }
+            $em->flush();
+            return new JsonResponse(['ok' => true]);
+        }
+        catch (\Exception $e) { return new JsonResponse(['ok' => false, 'message' => $e->getMessage()]); }
+    }
+
+    ////////////////////GESTIONAR CATALOGOS////////////////////
+
+    /**
+     * @Route("/catalogs", name="seguridad_vial_gestion_catalogos")
+     */
+    public function gestionCatalogosVentas()
+    {
+        return $this->render('controller/gestion_documentos/catalogos.html.twig');
+    }
+
+    /////Organismos Estatales//////////////////
+
+    /**
+     * @Route("/catalogs/orgest", name="seguridad_vial_gestion_catalogos_organismos_estatatles")
+     */
+    public function gestionCatalogosOrganismosEstatales()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(OrganismoEstatal::class)->findAll();
+
+        $form = $this->createForm(OrganismoEmisorType::class, new OrganismoEstatal());
+
+        return $this->render('controller/gestion_documentos/opciones/abmOrganismosEstatales.html.twig', ['form' => $form->createView() ,'organismos' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/orgest/procesar/{id}", name="seguridad_vial_gestion_organismos_estatales_procesar")
+     */
+    public function gestionCatalogosOrganismosEstatalesProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, OrganismoEstatal::class, OrganismoEmisorType::class, $id);
+    }
+
+    ///////////////
+
+    /////Planta Verificacion//////////////////
+
+    /**
+     * @Route("/catalogs/plantav", name="seguridad_vial_gestion_catalogos_plantas_verificacion")
+     */
+    public function gestionCatalogosPlantasVerificacion()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(PlantaVerificacion::class)->findAll();
+
+        $form = $this->createForm(PlantaVerificacionType::class, new PlantaVerificacion());
+
+        return $this->render('controller/gestion_documentos/opciones/abmPlantasVerificacion.html.twig', ['form' => $form->createView() ,'plantas' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/plantav/procesar/{id}", name="seguridad_vial_gestion_plantas_verificacion_procesar")
+     */
+    public function gestionCatalogosPlantasVerificacionProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, PlantaVerificacion::class, PlantaVerificacionType::class, $id);
+    }
+
+    ///////////////
+
+    /////Compañias de Seguro//////////////////
+
+    /**
+     * @Route("/catalogs/cniaseg", name="seguridad_vial_gestion_catalogos_compania_seguro")
+     */
+    public function gestionCatalogosCompaniaSeguro()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(CompaniaSeguro::class)->findAll();
+
+        $form = $this->createForm(CompaniaSeguroType::class, new CompaniaSeguro());
+
+        return $this->render('controller/gestion_documentos/opciones/abmCompaniaSeguro.html.twig', ['form' => $form->createView() ,'companias' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/cniaseg/procesar/{id}", name="seguridad_vial_gestion_catalogos_compania_seguro_procesar")
+     */
+    public function gestionCatalogosCompaniaSeguroProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, CompaniaSeguro::class, CompaniaSeguroType::class, $id);
+    }
+
+    ///////////////
+
+    /////Tpo Destino Seguro//////////////////
+
+    /**
+     * @Route("/catalogs/tipodest", name="seguridad_vial_gestion_catalogos_tipo_destino_seguro")
+     */
+    public function gestionCatalogosTipoDestinoSeguro()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(TipoDestinoSeguro::class)->findAll();
+
+        $form = $this->createForm(TipoDestinoSeguroType::class, new TipoDestinoSeguro());
+
+        return $this->render('controller/gestion_documentos/opciones/abmTipoDestinoSeguro.html.twig', ['form' => $form->createView() ,'tipos' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/tipodest/procesar/{id}", name="seguridad_vial_gestion_catalogos_tipo_destino_seguro_procesar")
+     */
+    public function gestionCatalogosTipoDestinoSeguroProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, TipoDestinoSeguro::class, TipoDestinoSeguroType::class, $id);
+    }
+
+    ///////////////
+
+    /////Tpo Cobertura Seguro//////////////////
+
+    /**
+     * @Route("/catalogs/cobertura", name="seguridad_vial_gestion_catalogos_cobertura_seguro")
+     */
+    public function gestionCatalogosCoberturaSeguro()
+    {
+        $em = $this->getDoctrine();
+
+        $data = $em->getRepository(CoberturaSeguro::class)->findAll();
+
+        $form = $this->createForm(CoberturaSeguroType::class, new CoberturaSeguro());
+
+        return $this->render('controller/gestion_documentos/opciones/abmCoberturaSeguro.html.twig', ['form' => $form->createView() ,'coberturas' => $data]);
+    }
+
+    /**
+     * @Route("/catalogs/cobertura/procesar/{id}", name="seguridad_vial_gestion_catalogos_cobertura_seguro_procesar")
+     */
+    public function gestionCatalogosCoberturaSeguroProcesar($id = 0, Request $request)
+    {
+        return $this->gestonarRequest($request, CoberturaSeguro::class, CoberturaSeguroType::class, $id);
+    }
+
+    ///////////////
+
+    ////////////////////FIN GESTIONAR CATALOGOS///////////////////////////////
 
 
 

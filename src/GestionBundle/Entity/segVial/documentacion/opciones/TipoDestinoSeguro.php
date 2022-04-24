@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
   * @UniqueEntity(
  *     fields={"destino"},
  *     errorPath="destino",
- *     message="Destino existente en la Base de Datos"
+ *     message="Destino existente en la Base de Datos",
+ *     groups={"general", "tecnical"}
  * )
  */
 class TipoDestinoSeguro
@@ -31,9 +32,14 @@ class TipoDestinoSeguro
      * @var string
      *
      * @ORM\Column(name="destino", type="string", length=255)
-     * @Assert\NotNull(message="El campo no puede permanecer en blanco")
+     * @Assert\NotNull(message="El campo no puede permanecer en blanco", groups={"general", "tecnical"})
      */
     private $destino;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active = true;
 
     public function __toString()
     {
@@ -53,6 +59,18 @@ class TipoDestinoSeguro
     public function setDestino(string $destino): self
     {
         $this->destino = $destino;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

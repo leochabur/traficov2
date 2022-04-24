@@ -1,0 +1,236 @@
+{% extends 'sistema/base.html.twig' %}
+{% set mutipleselect = true %}
+{% set datatable = true %}
+{% block title_module %}
+	Catalogos Seguridad Vial
+{% endblock %}
+
+{% block styles %}
+	<style>
+			.fontReduce
+			{
+			  font-size: 0.75em;
+			}
+</style>
+	{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+	<br>
+<div class="accordion mt-2" id="accordionExample275">
+
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Ciudades
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-ciudades" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-ciudades" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-ciudades"
+			        		href="{{ path('activos_gestion_catalogos_ciudades') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-ciudades" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>
+
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Cobertura Seguro
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-cobertura" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-cobertura" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-cobertura"
+			        		href="{{ path('seguridad_vial_gestion_catalogos_cobertura_seguro') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-cobertura" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>
+
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Compañias Seguro   
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-compania" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-compania" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-compania"
+			        		href="{{ path('seguridad_vial_gestion_catalogos_compania_seguro') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-compania" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>
+
+   <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Organismos Emisores Habilitacion
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-organismos" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-organismos" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-organismos"
+			        		href="{{ path('seguridad_vial_gestion_catalogos_organismos_estatatles') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-organismos" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>
+
+   <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipo-hab">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Plantas Verificacion
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-plantasv" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-plantasv" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-plantasv"
+			        		href="{{ path('seguridad_vial_gestion_catalogos_plantas_verificacion') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-plantasv" class="collapse" aria-labelledby="tab-tipo-hab" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>
+
+  <div class="card z-depth-0 mt-2">
+    <div class="card-header" id="tab-tipodestseguro">
+    	<div class="row">
+	    		<div class="col-lg-6">
+	    			Tipo Destinos Seguro
+	      	</div>
+		      <div class="col-lg-6 text-right">
+			        <a class="collapsed load-ajax" 
+			        	  data-body="body-tipodestseguro" 
+			        		data-toggle="collapse" 
+			        		data-target="#body-tipodestseguro" 
+			        		aria-expanded="true" 
+			        		aria-controls="body-tipodestseguro"
+			        		href="{{ path('seguridad_vial_gestion_catalogos_tipo_destino_seguro') }}">
+			          		<i class="fas fa-angle-down fa-lg"></i>
+			        </a>      	
+		      </div>
+      </div>
+    </div>
+    <div id="body-tipodestseguro" class="collapse" aria-labelledby="tab-tipodestseguro" data-parent="#accordionExample275">
+		      <div class="card-body">
+		      	
+		      </div>
+    </div>
+  </div>  
+
+
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+	<script type="text/javascript">
+
+		  	function refreshTab(id, url)
+	  		{
+	  					console.log(id, ' ', url);
+	  					$('#'+id).load(url);
+	  		}
+
+			  $(document).ready(function() {
+
+			  	  let collapse = false;
+
+						$('#accordionExample275').on('shown.bs.collapse', function () {
+																																				//		alert('OKA OKA');
+
+						})
+
+
+
+
+			  		$('.load-ajax').click(function(){
+			  																			var a = $(this);
+
+			  																			refreshTab(a.data('body'), a.attr('href'));
+			  		});
+
+
+		        $('.select-tripulacion').multiselect({
+		          enableClickableOptGroups: true,
+		          buttonWidth: '300px',
+		        });
+
+					 var table = $('#dt-filter-select').dataTable({          	    																		
+		    													"paging": true,
+																"info" : false,
+																"searching": false,
+																"lengthChange": false,
+																"bFilter" : true,
+																"language": {
+														    				"paginate": {
+																					      "first": "Primera",
+																					      "last": "Ultima",
+																					      "previous" : "Anterior",
+																					      "next" : "Siguiente"
+																					    }
+																  			}
+	  				});
+		    });
+
+	</script>
+{% endblock javascripts %}
+

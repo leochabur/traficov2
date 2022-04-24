@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 
 class VerificacionTecnicaProvincialType extends AbstractType
 {
@@ -23,7 +24,12 @@ class VerificacionTecnicaProvincialType extends AbstractType
             ->add('numeroCertificado')
             ->add('proveedor',EntityType::class,
                   [
-                    'class' => PlantaVerificacion::class
+                    'class' => PlantaVerificacion::class,
+                    'query_builder' => function (EntityRepository $er) {
+                                                                            return $er->createQueryBuilder('u')
+                                                                                      ->where("u.juisdiccion = 'PRO'")
+                                                                                      ->andWhere('u.active = true');
+                                                                        },
                   ])
             ->addEventListener(FormEvents::PRE_SET_DATA, 
                               function (FormEvent $event) {
